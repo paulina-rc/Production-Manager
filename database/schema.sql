@@ -1,26 +1,13 @@
-CREATE TABLE roles (
+CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    role_name VARCHAR(50) NOT NULL UNIQUE
+    name VARCHAR(150) NOT NULL UNIQUE,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE users (
+CREATE TABLE raw_materials (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    full_name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    role_id INT NOT NULL,
-    status BOOLEAN NOT NULL DEFAULT TRUE,
-    last_login DATETIME NULL,
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_users_role
-        FOREIGN KEY (role_id)
-        REFERENCES roles(id)
-);
-
-CREATE TABLE sections (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(20) NOT NULL UNIQUE,
+    name VARCHAR(150) NOT NULL UNIQUE,
     active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -30,9 +17,7 @@ CREATE TABLE productions (
 
     production_date DATE NOT NULL,
 
-    product_name VARCHAR(150) NOT NULL,
-
-    raw_materials TEXT NOT NULL,
+    product_id INT NOT NULL,
 
     processed_by INT NOT NULL,
 
@@ -52,6 +37,10 @@ CREATE TABLE productions (
 
     deleted_at DATETIME NULL DEFAULT NULL,
 
+    CONSTRAINT fk_productions_product
+        FOREIGN KEY (product_id)
+        REFERENCES products(id),
+
     CONSTRAINT fk_productions_processed_by
         FOREIGN KEY (processed_by)
         REFERENCES users(id),
@@ -65,18 +54,18 @@ CREATE TABLE productions (
         REFERENCES sections(id)
 );
 
-CREATE TABLE password_resets (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE production_raw_materials (
+    production_id INT NOT NULL,
+    raw_material_id INT NOT NULL,
 
-    user_id INT NOT NULL,
+    PRIMARY KEY (production_id, raw_material_id),
 
-    token VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_prm_production
+        FOREIGN KEY (production_id)
+        REFERENCES productions(id)
+        ON DELETE CASCADE,
 
-    expires_at DATETIME NOT NULL,
-
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_password_resets_user
-        FOREIGN KEY (user_id)
-        REFERENCES users(id)
+    CONSTRAINT fk_prm_raw_material
+        FOREIGN KEY (raw_material_id)
+        REFERENCES raw_materials(id)
 );
