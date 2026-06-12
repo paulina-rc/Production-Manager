@@ -1,14 +1,47 @@
-CREATE TABLE products (
+CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(150) NOT NULL UNIQUE,
+    role_name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    full_name VARCHAR(100) NOT NULL,
+
+    email VARCHAR(150) NOT NULL UNIQUE,
+
+    password VARCHAR(255) NOT NULL,
+
+    role_id INT NOT NULL,
+
+    status BOOLEAN NOT NULL DEFAULT TRUE,
+
+    last_login DATETIME NULL,
+
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_users_role
+        FOREIGN KEY (role_id)
+        REFERENCES roles(id)
+);
+
+CREATE TABLE sections (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    name VARCHAR(20) NOT NULL UNIQUE,
+
     active BOOLEAN NOT NULL DEFAULT TRUE,
+
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE raw_materials (
+CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
+
     name VARCHAR(150) NOT NULL UNIQUE,
+
     active BOOLEAN NOT NULL DEFAULT TRUE,
+
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -18,6 +51,8 @@ CREATE TABLE productions (
     production_date DATE NOT NULL,
 
     product_id INT NOT NULL,
+
+    raw_materials TEXT NOT NULL,
 
     processed_by INT NOT NULL,
 
@@ -54,18 +89,18 @@ CREATE TABLE productions (
         REFERENCES sections(id)
 );
 
-CREATE TABLE production_raw_materials (
-    production_id INT NOT NULL,
-    raw_material_id INT NOT NULL,
+CREATE TABLE password_resets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
 
-    PRIMARY KEY (production_id, raw_material_id),
+    user_id INT NOT NULL,
 
-    CONSTRAINT fk_prm_production
-        FOREIGN KEY (production_id)
-        REFERENCES productions(id)
-        ON DELETE CASCADE,
+    token VARCHAR(255) NOT NULL,
 
-    CONSTRAINT fk_prm_raw_material
-        FOREIGN KEY (raw_material_id)
-        REFERENCES raw_materials(id)
+    expires_at DATETIME NOT NULL,
+
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_password_resets_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
 );
