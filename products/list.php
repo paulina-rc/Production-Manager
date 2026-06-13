@@ -37,6 +37,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <th>ID</th>
             <th>Name</th>
             <th>Status</th>
+            <th>Actions</th>
         </tr>
 
         <?php foreach ($products as $product): ?>
@@ -49,6 +50,12 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <td>
                     <?php echo $product['active'] ? 'Active' : 'Inactive'; ?>
+                </td>
+
+                <td>
+                    <a href="edit.php?id=<?php echo $product['id']; ?>">
+                        Edit
+                    </a>
                 </td>
 
             </tr>
