@@ -19,4 +19,5 @@ require_once dirname(__DIR__) . '/config/auth.php';
     <li><a href="../reports/monthly.php">Reports</a></li>
     <li><a href="../users/list.php">Users</a></li>
     <li><a href="../auth/logout.php">Logout</a></li>
+    <li><a href="../sections/list.php">Sections</a></li>
 </ul>
