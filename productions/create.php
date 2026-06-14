@@ -17,16 +17,6 @@ $sections = $pdo->query("
     ORDER BY name
 ")->fetchAll(PDO::FETCH_ASSOC);
 
-$professors = $pdo->query("
-    SELECT users.id, users.full_name
-    FROM users
-    INNER JOIN roles
-        ON users.role_id = roles.id
-    WHERE users.status = 1
-    AND roles.role_name = 'professor'
-    ORDER BY users.full_name
-")->fetchAll(PDO::FETCH_ASSOC);
-
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,23 +24,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $productionDate = $_POST['production_date'];
     $productId = (int) $_POST['product_id'];
     $rawMaterials = trim($_POST['raw_materials']);
-    $processedBy = (int) $_POST['processed_by'];
     $sectionId = (int) $_POST['section_id'];
     $quantity = (float) $_POST['quantity'];
     $unit = trim($_POST['unit']);
     $customUnit = trim($_POST['custom_unit']);
 
+    $processedBy = $_SESSION['user_id'];
+
     if (
         empty($productionDate) ||
         empty($productId) ||
         empty($rawMaterials) ||
-        empty($processedBy) ||
         empty($sectionId) ||
         empty($quantity) ||
         empty($unit)
     ) {
 
-        $error = 'All fields are required';
+        $error = 'Todos los campos son obligatorios';
 
     } else {
 
@@ -91,16 +81,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Create Production</title>
+    <title>Registrar Producción</title>
 </head>
 <body>
 
-<h1>Create Production</h1>
+<h1>Registrar Producción</h1>
 
-<a href="list.php">Back to History</a>
+<a href="list.php">Volver al Historial</a>
 
 <br><br>
 
@@ -110,18 +100,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <form method="POST">
 
-    <label>Production Date</label>
+    <label>Fecha de Producción</label>
     <br>
     <input type="date" name="production_date" required>
 
     <br><br>
 
-    <label>Product</label>
+    <label>Producto</label>
     <br>
 
     <select name="product_id" required>
 
-        <option value="">Select Product</option>
+        <option value="">Seleccione un producto</option>
 
         <?php foreach ($products as $product): ?>
 
@@ -135,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <br><br>
 
-    <label>Raw Materials</label>
+    <label>Materias Primas</label>
     <br>
 
     <textarea
@@ -147,31 +137,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <br><br>
 
-    <label>Processed By</label>
-    <br>
-
-    <select name="processed_by" required>
-
-        <option value="">Select Professor</option>
-
-        <?php foreach ($professors as $professor): ?>
-
-            <option value="<?php echo $professor['id']; ?>">
-                <?php echo htmlspecialchars($professor['full_name']); ?>
-            </option>
-
-        <?php endforeach; ?>
-
-    </select>
-
-    <br><br>
-
-    <label>Section</label>
+    <label>Sección</label>
     <br>
 
     <select name="section_id" required>
 
-        <option value="">Select Section</option>
+        <option value="">Seleccione una sección</option>
 
         <?php foreach ($sections as $section): ?>
 
@@ -185,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <br><br>
 
-    <label>Quantity</label>
+    <label>Cantidad</label>
     <br>
 
     <input
@@ -198,25 +169,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <br><br>
 
-    <label>Unit</label>
+    <label>Unidad</label>
     <br>
 
     <select name="unit" required>
 
-        <option value="">Select Unit</option>
+        <option value="">Seleccione una unidad</option>
 
-        <option value="Units">Units</option>
-        <option value="Kilograms">Kilograms</option>
-        <option value="Grams">Grams</option>
-        <option value="Liters">Liters</option>
-        <option value="Milliliters">Milliliters</option>
-        <option value="Other">Other</option>
+        <option value="Units">Unidades</option>
+        <option value="Kilograms">Kilogramos</option>
+        <option value="Grams">Gramos</option>
+        <option value="Liters">Litros</option>
+        <option value="Milliliters">Mililitros</option>
+        <option value="Other">Otro</option>
 
     </select>
 
     <br><br>
 
-    <label>Custom Unit (Only if Other)</label>
+    <label>Unidad Personalizada (solo si seleccionó "Otro")</label>
     <br>
 
     <input
@@ -228,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <br><br>
 
     <button type="submit">
-        Save Production
+        Guardar Producción
     </button>
 
 </form>
