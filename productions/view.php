@@ -54,71 +54,142 @@ if (!$production) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
     <meta charset="UTF-8">
+
     <title>Detalle de Producción</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-<h1>Detalle de Producción</h1>
+<?php require_once '../includes/sidebar.php'; ?>
 
-<a href="list.php">Volver al Historial</a>
+<div class="main-content">
 
-<br><br>
+    <div class="welcome-box">
 
-<p>
-    <strong>Fecha de Producción:</strong>
-    <?php echo htmlspecialchars($production['production_date']); ?>
-</p>
+        <h1>Detalle de Producción</h1>
 
-<p>
-    <strong>Producto:</strong>
-    <?php echo htmlspecialchars($production['product_name']); ?>
-</p>
+        <p>
+            Información completa del registro seleccionado.
+        </p>
 
-<p>
-    <strong>Materias Primas:</strong><br>
-    <?php echo nl2br(htmlspecialchars($production['raw_materials'])); ?>
-</p>
+    </div>
 
-<p>
-    <strong>Procesado por:</strong>
-    <?php echo htmlspecialchars($production['processed_by_name']); ?>
-</p>
+    <div class="profile-card">
 
-<p>
-    <strong>Registrado por:</strong>
-    <?php echo htmlspecialchars($production['created_by_name']); ?>
-</p>
+        <div class="table-header">
 
-<p>
-    <strong>Sección:</strong>
-    <?php echo htmlspecialchars($production['section_name']); ?>
-</p>
+            <h2>Información General</h2>
 
-<p>
-    <strong>Cantidad:</strong>
-    <?php echo htmlspecialchars($production['quantity']); ?>
-</p>
+            <a class="btn"
+               href="list.php">
+                Volver al Historial
+            </a>
 
-<p>
-    <strong>Unidad:</strong>
+        </div>
 
-    <?php
-    if (
-        $production['unit'] === 'Other' &&
-        !empty($production['custom_unit'])
-    ) {
-        echo htmlspecialchars($production['custom_unit']);
-    } else {
-        echo htmlspecialchars($production['unit']);
-    }
-    ?>
-</p>
+        <hr>
 
-<p>
-    <strong>Fecha de Registro:</strong>
-    <?php echo htmlspecialchars($production['created_at']); ?>
-</p>
+        <h3>Producto</h3>
+
+        <p>
+            <?php echo htmlspecialchars($production['product_name']); ?>
+        </p>
+
+        <hr>
+
+        <h3>Fecha de Producción</h3>
+
+        <p>
+            <?php echo htmlspecialchars($production['production_date']); ?>
+        </p>
+
+        <hr>
+
+        <h3>Materias Primas</h3>
+
+        <p>
+            <?php echo nl2br(
+                htmlspecialchars($production['raw_materials'])
+            ); ?>
+        </p>
+
+        <hr>
+
+        <h3>Procesado por</h3>
+
+        <p>
+            <?php echo htmlspecialchars($production['processed_by_name']); ?>
+        </p>
+
+        <hr>
+
+        <h3>Registrado por</h3>
+
+        <p>
+            <?php echo htmlspecialchars($production['created_by_name']); ?>
+        </p>
+
+        <hr>
+
+        <h3>Sección</h3>
+
+        <p>
+            <?php echo htmlspecialchars($production['section_name']); ?>
+        </p>
+
+        <hr>
+
+        <h3>Cantidad</h3>
+
+        <p>
+            <?php echo htmlspecialchars($production['quantity']); ?>
+        </p>
+
+        <hr>
+
+        <h3>Unidad</h3>
+
+        <p>
+
+            <?php
+
+            if (
+                $production['unit'] === 'Other' &&
+                !empty($production['custom_unit'])
+            ) {
+
+                echo htmlspecialchars(
+                    $production['custom_unit']
+                );
+
+            } else {
+
+                echo htmlspecialchars(
+                    $production['unit']
+                );
+
+            }
+
+            ?>
+
+        </p>
+
+        <hr>
+
+        <h3>Fecha de Registro</h3>
+
+        <p>
+            <?php echo htmlspecialchars($production['created_at']); ?>
+        </p>
+
+    </div>
+
+</div>
 
 </body>
 </html>

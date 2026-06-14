@@ -83,126 +83,184 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
     <meta charset="UTF-8">
+
     <title>Registrar Producción</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-<h1>Registrar Producción</h1>
+<?php require_once '../includes/sidebar.php'; ?>
 
-<a href="list.php">Volver al Historial</a>
+<div class="main-content">
 
-<br><br>
+    <div class="welcome-box">
 
-<?php if (!empty($error)): ?>
-    <p><?php echo $error; ?></p>
-<?php endif; ?>
+        <h1>Nueva Producción</h1>
 
-<form method="POST">
+        <p>
+            Registrar una nueva producción agroindustrial.
+        </p>
 
-    <label>Fecha de Producción</label>
-    <br>
-    <input type="date" name="production_date" required>
+    </div>
 
-    <br><br>
+    <div class="profile-card">
 
-    <label>Producto</label>
-    <br>
+        <div class="table-header">
 
-    <select name="product_id" required>
+            <h2>Formulario de Registro</h2>
 
-        <option value="">Seleccione un producto</option>
+            <a class="btn"
+               href="list.php">
+                Volver al Historial
+            </a>
 
-        <?php foreach ($products as $product): ?>
+        </div>
 
-            <option value="<?php echo $product['id']; ?>">
-                <?php echo htmlspecialchars($product['name']); ?>
-            </option>
+        <?php if (!empty($error)): ?>
 
-        <?php endforeach; ?>
+            <p style="
+                color:#dc2626;
+                margin-bottom:20px;
+                font-weight:bold;
+            ">
+                <?php echo $error; ?>
+            </p>
 
-    </select>
+        <?php endif; ?>
 
-    <br><br>
+        <form method="POST">
 
-    <label>Materias Primas</label>
-    <br>
+            <label>Fecha de Producción</label>
 
-    <textarea
-        name="raw_materials"
-        rows="4"
-        cols="50"
-        required
-    ></textarea>
+            <input
+                type="date"
+                name="production_date"
+                required
+            >
 
-    <br><br>
+            <br><br>
 
-    <label>Sección</label>
-    <br>
+            <label>Producto</label>
 
-    <select name="section_id" required>
+            <select
+                name="product_id"
+                required
+            >
 
-        <option value="">Seleccione una sección</option>
+                <option value="">
+                    Seleccione un producto
+                </option>
 
-        <?php foreach ($sections as $section): ?>
+                <?php foreach ($products as $product): ?>
 
-            <option value="<?php echo $section['id']; ?>">
-                <?php echo htmlspecialchars($section['name']); ?>
-            </option>
+                    <option
+                        value="<?php echo $product['id']; ?>"
+                    >
+                        <?php echo htmlspecialchars($product['name']); ?>
+                    </option>
 
-        <?php endforeach; ?>
+                <?php endforeach; ?>
 
-    </select>
+            </select>
 
-    <br><br>
+            <br><br>
 
-    <label>Cantidad</label>
-    <br>
+            <label>Materias Primas</label>
 
-    <input
-        type="number"
-        step="0.01"
-        min="0.01"
-        name="quantity"
-        required
-    >
+            <textarea
+                name="raw_materials"
+                rows="5"
+                required
+            ></textarea>
 
-    <br><br>
+            <br><br>
 
-    <label>Unidad</label>
-    <br>
+            <label>Sección</label>
 
-    <select name="unit" required>
+            <select
+                name="section_id"
+                required
+            >
 
-        <option value="">Seleccione una unidad</option>
+                <option value="">
+                    Seleccione una sección
+                </option>
 
-        <option value="Units">Unidades</option>
-        <option value="Kilograms">Kilogramos</option>
-        <option value="Grams">Gramos</option>
-        <option value="Liters">Litros</option>
-        <option value="Milliliters">Mililitros</option>
-        <option value="Other">Otro</option>
+                <?php foreach ($sections as $section): ?>
 
-    </select>
+                    <option
+                        value="<?php echo $section['id']; ?>"
+                    >
+                        <?php echo htmlspecialchars($section['name']); ?>
+                    </option>
 
-    <br><br>
+                <?php endforeach; ?>
 
-    <label>Unidad Personalizada (solo si seleccionó "Otro")</label>
-    <br>
+            </select>
 
-    <input
-        type="text"
-        name="custom_unit"
-        maxlength="50"
-    >
+            <br><br>
 
-    <br><br>
+            <label>Cantidad</label>
 
-    <button type="submit">
-        Guardar Producción
-    </button>
+            <input
+                type="number"
+                step="0.01"
+                min="0.01"
+                name="quantity"
+                required
+            >
 
-</form>
+            <br><br>
+
+            <label>Unidad</label>
+
+            <select
+                name="unit"
+                required
+            >
+
+                <option value="">
+                    Seleccione una unidad
+                </option>
+
+                <option value="Units">Unidades</option>
+                <option value="Kilograms">Kilogramos</option>
+                <option value="Grams">Gramos</option>
+                <option value="Liters">Litros</option>
+                <option value="Milliliters">Mililitros</option>
+                <option value="Other">Otro</option>
+
+            </select>
+
+            <br><br>
+
+            <label>Unidad Personalizada</label>
+
+            <input
+                type="text"
+                name="custom_unit"
+                maxlength="50"
+            >
+
+            <br><br>
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                Guardar Producción
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
 
 </body>
 </html>

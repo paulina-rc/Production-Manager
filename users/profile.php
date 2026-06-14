@@ -28,16 +28,13 @@ if (!$user) {
 ?>
 
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>Mi Perfil</title>
 
-<title>Mi Perfil</title>
-
-<link rel="stylesheet"
-      href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 
 </head>
 <body>
@@ -46,133 +43,108 @@ if (!$user) {
 
 <div class="main-content">
 
-```
-<div class="welcome-box">
-
-    <h1>Mi Perfil</h1>
-
-    <p>
-        Información de la cuenta actual.
-    </p>
-
-</div>
-
-<div class="profile-container">
-
-    <div class="profile-card">
-
-        <h2>Información Personal</h2>
-
-        <hr>
-
-        <h3>Nombre</h3>
-
-        <p>
-            <?php echo htmlspecialchars($user['full_name']); ?>
-        </p>
-
-        <hr>
-
-        <h3>Correo</h3>
-
-        <p>
-            <?php echo htmlspecialchars($user['email']); ?>
-        </p>
-
-        <hr>
-
-        <h3>Rol</h3>
-
-        <p>
-            <?php echo htmlspecialchars($user['role_name']); ?>
-        </p>
-
-        <hr>
-
-        <h3>Último acceso</h3>
-
-        <p>
-            <?php echo $user['last_login']
-                ? htmlspecialchars($user['last_login'])
-                : 'Sin registros';
-            ?>
-        </p>
-
+    <div class="welcome-box">
+        <h1>Mi Perfil</h1>
+        <p>Información de la cuenta actual.</p>
     </div>
 
-    <div class="profile-card">
+    <div class="profile-container">
 
-        <h2>Configuración de Cuenta</h2>
+        <!-- INFORMACIÓN PERSONAL -->
+        <div class="profile-card">
 
-        <hr>
+            <h2>Información Personal</h2>
 
-        <h3>Cambiar Contraseña</h3>
+            <hr>
 
-        <form method="POST">
+            <h3>Nombre</h3>
+            <p><?php echo htmlspecialchars($user['full_name']); ?></p>
 
-            <label>Contraseña Actual</label>
+            <hr>
 
-            <br><br>
+            <h3>Correo</h3>
+            <p><?php echo htmlspecialchars($user['email']); ?></p>
 
-            <input
-                type="password"
-                name="current_password"
-            >
+            <hr>
 
-            <br><br>
+            <h3>Rol</h3>
+            <p><?php echo htmlspecialchars($user['role_name']); ?></p>
 
-            <label>Nueva Contraseña</label>
+            <hr>
 
-            <br><br>
+            <h3>Último acceso</h3>
 
-            <input
-                type="password"
-                name="new_password"
-            >
+            <p>
+                <?php
+                echo !empty($user['last_login'])
+                    ? htmlspecialchars($user['last_login'])
+                    : 'Sin registros';
+                ?>
+            </p>
 
-            <br><br>
+        </div>
 
-            <label>Confirmar Nueva Contraseña</label>
+        <!-- CONFIGURACIÓN -->
+        <div class="profile-card">
 
-            <br><br>
+            <h2>Configuración de Cuenta</h2>
 
-            <input
-                type="password"
-                name="confirm_password"
-            >
+            <hr>
 
-            <br><br>
+            <h3>Cambiar Contraseña</h3>
 
-            <button
-                type="submit"
-                name="change_password"
-                class="btn"
-            >
-                Actualizar Contraseña
-            </button>
+            <form method="POST">
 
-        </form>
+                <label>Contraseña Actual</label>
 
-        <hr>
+                <input
+                    type="password"
+                    name="current_password"
+                >
 
-        <h3>Idioma</h3>
+                <br><br>
 
-        <p>
-            Próximamente
-        </p>
+                <label>Nueva Contraseña</label>
 
-        <hr>
+                <input
+                    type="password"
+                    name="new_password"
+                >
 
-        <h3>Tema</h3>
+                <br><br>
 
-        <p>
-            Próximamente
-        </p>
+                <label>Confirmar Nueva Contraseña</label>
+
+                <input
+                    type="password"
+                    name="confirm_password"
+                >
+
+                <br><br>
+
+                <button
+                    type="submit"
+                    name="change_password"
+                    class="btn"
+                >
+                    Actualizar Contraseña
+                </button>
+
+            </form>
+
+            <hr>
+
+            <h3>Idioma</h3>
+            <p>Próximamente</p>
+
+            <hr>
+
+            <h3>Tema</h3>
+            <p>Próximamente</p>
+
+        </div>
 
     </div>
-
-</div>
-
 
 </div>
 

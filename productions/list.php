@@ -8,7 +8,6 @@ $stmt = $pdo->query("
         productions.id,
         productions.production_date,
         products.name AS product_name,
-        productions.raw_materials,
         productions.quantity,
         productions.unit,
 
@@ -39,94 +38,136 @@ $stmt = $pdo->query("
 
 $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$totalProductions = count($productions);
+
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productions</title>
-    <a href="create.php">New Production</a>
 
-    <br><br>
+    <meta charset="UTF-8">
+
+    <title>Producciones</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-<h1>Production History</h1>
+<?php require_once '../includes/sidebar.php'; ?>
 
-<a href="../dashboard/index.php">Dashboard</a>
+<div class="main-content">
 
-<br><br>
+    <div class="welcome-box">
 
-<a href="create.php">New Production</a>
+        <h1>🧪 Producciones</h1>
 
-<br><br>
+        <p>
+            Historial completo de producciones registradas.
+        </p>
 
-<table border="1">
+    </div>
 
-    <tr>
-        <th>Date</th>
-        <th>Product</th>
-        <th>Processed By</th>
-        <th>Registered By</th>
-        <th>Section</th>
-        <th>Quantity</th>
-        <th>Unit</th>
-        <th>Actions</th>
-    </tr>
+    <div class="stats-container">
 
-    <?php foreach ($productions as $production): ?>
+        <div class="stat-card">
+            <h3>Total Producciones</h3>
+            <div class="stat-number">
+                <?php echo $totalProductions; ?>
+            </div>
+        </div>
 
-        <tr>
+    </div>
 
-            <td>
-                <?php echo htmlspecialchars($production['production_date']); ?>
-            </td>
+    <div class="table-card">
 
-            <td>
-                <?php echo htmlspecialchars($production['product_name']); ?>
-            </td>
+        <div class="table-header">
 
-            <td>
-                <?php echo htmlspecialchars($production['processed_by_name']); ?>
-            </td>
+            <h2>Historial de Producción</h2>
 
-            <td>
-                <?php echo htmlspecialchars($production['created_by_name']); ?>
-            </td>
+            <a class="btn"
+               href="create.php">
+                + Nueva Producción
+            </a>
 
-            <td>
-                <?php echo htmlspecialchars($production['section_name']); ?>
-            </td>
+        </div>
 
-            <td>
-                <?php echo htmlspecialchars($production['quantity']); ?>
-            </td>
+        <table class="table">
 
-            <td>
-                <?php echo htmlspecialchars($production['unit']); ?>
-            </td>
+            <thead>
 
-            <td>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Producto</th>
+                    <th>Procesado Por</th>
+                    <th>Registrado Por</th>
+                    <th>Sección</th>
+                    <th>Cantidad</th>
+                    <th>Unidad</th>
+                    <th>Acciones</th>
+                </tr>
 
-                <a href="view.php?id=<?php echo $production['id']; ?>">
-                    View
-                </a>
+            </thead>
 
-                |
+            <tbody>
 
-                <a href="edit.php?id=<?php echo $production['id']; ?>">
-                    Edit
-                </a>
+            <?php foreach ($productions as $production): ?>
 
-            </td>
+                <tr>
 
-        </tr>
+                    <td>
+                        <?php echo htmlspecialchars($production['production_date']); ?>
+                    </td>
 
-    <?php endforeach; ?>
+                    <td>
+                        <?php echo htmlspecialchars($production['product_name']); ?>
+                    </td>
 
-</table>
+                    <td>
+                        <?php echo htmlspecialchars($production['processed_by_name']); ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars($production['created_by_name']); ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars($production['section_name']); ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars($production['quantity']); ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars($production['unit']); ?>
+                    </td>
+
+                    <td class="action-links">
+
+                        <a href="view.php?id=<?php echo $production['id']; ?>">
+                            Ver
+                        </a>
+
+                        <a href="edit.php?id=<?php echo $production['id']; ?>">
+                            Editar
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            <?php endforeach; ?>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 
 </body>
 </html>

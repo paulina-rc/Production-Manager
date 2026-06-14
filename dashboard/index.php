@@ -44,7 +44,7 @@ $totalProductions = $pdo->query("
 
 <div class="main-content">
 
-```
+
 <div class="welcome-box">
 
     <h1>
@@ -167,7 +167,7 @@ $totalProductions = $pdo->query("
     </div>
 
 </div>
-```
+
 
 </div>
 
