@@ -1,7 +1,28 @@
 <?php
 
 require_once dirname(__DIR__) . '/config/auth.php';
+require_once dirname(__DIR__) . '/config/database.php';
 
+$totalProducts = $pdo->query("
+    SELECT COUNT(*)
+    FROM products
+")->fetchColumn();
+
+$totalUsers = $pdo->query("
+    SELECT COUNT(*)
+    FROM users
+")->fetchColumn();
+
+$totalSections = $pdo->query("
+    SELECT COUNT(*)
+    FROM sections
+")->fetchColumn();
+
+$totalProductions = $pdo->query("
+    SELECT COUNT(*)
+    FROM productions
+    WHERE deleted_at IS NULL
+")->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -40,22 +61,30 @@ require_once dirname(__DIR__) . '/config/auth.php';
 
     <div class="stat-card">
         <h3>📦 Productos</h3>
-        <div class="stat-number">--</div>
+        <div class="stat-number">
+    <?php echo $totalProducts; ?>
+</div>
     </div>
 
     <div class="stat-card">
         <h3>👥 Usuarios</h3>
-        <div class="stat-number">--</div>
+        <div class="stat-number">
+    <?php echo $totalUsers; ?>
+</div>
     </div>
 
     <div class="stat-card">
         <h3>🏫 Secciones</h3>
-        <div class="stat-number">--</div>
+        <div class="stat-number">
+    <?php echo $totalSections; ?>
+</div>
     </div>
 
     <div class="stat-card">
         <h3>🧪 Producciones</h3>
-        <div class="stat-number">--</div>
+        <div class="stat-number">
+    <?php echo $totalProductions; ?>
+</div>
     </div>
 
 </div>

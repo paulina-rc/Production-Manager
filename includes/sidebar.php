@@ -1,6 +1,6 @@
 <div class="sidebar">
 
-```
+
 <h2>🌱 Agro Manager</h2>
 
 <a href="../dashboard/index.php">
@@ -35,9 +35,13 @@
     📈 Reporte Anual
 </a>
 
+<a href="../users/profile.php">
+    👤 Mi Perfil
+</a>
+
 <a href="../auth/logout.php">
     🚪 Cerrar Sesión
 </a>
-```
+
 
 </div>

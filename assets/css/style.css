@@ -128,3 +128,44 @@ body {
 .btn:hover {
     background: #15803d;
 }
+
+
+.profile-container {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.profile-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, .08);
+    flex: 1;
+    min-width: 400px;
+}
+
+.profile-card h2 {
+    color: #166534;
+    margin-bottom: 20px;
+}
+
+.profile-card h3 {
+    color: #166534;
+    margin-bottom: 10px;
+}
+
+.profile-card hr {
+    margin: 20px 0;
+}
+
+.profile-card input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+}
+
+.profile-card button {
+    margin-top: 10px;
+}
