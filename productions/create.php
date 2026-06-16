@@ -135,7 +135,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <form method="POST">
 
-            <label>Fecha de Producción</label>
+    <div class="form-grid">
+
+        <div class="form-group">
+
+            <label>
+                Fecha de Producción
+            </label>
 
             <input
                 type="date"
@@ -143,9 +149,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 required
             >
 
-            <br><br>
+        </div>
 
-            <label>Producto</label>
+        <div class="form-group">
+
+            <label>
+                Producto
+            </label>
 
             <select
                 name="product_id"
@@ -168,19 +178,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             </select>
 
-            <br><br>
+        </div>
 
-            <label>Materias Primas</label>
+        <div class="form-group">
 
-            <textarea
-                name="raw_materials"
-                rows="5"
-                required
-            ></textarea>
-
-            <br><br>
-
-            <label>Sección</label>
+            <label>
+                Sección
+            </label>
 
             <select
                 name="section_id"
@@ -203,9 +207,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             </select>
 
-            <br><br>
+        </div>
 
-            <label>Cantidad</label>
+        <div class="form-group">
+
+            <label>
+                Cantidad
+            </label>
 
             <input
                 type="number"
@@ -215,9 +223,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 required
             >
 
-            <br><br>
+        </div>
 
-            <label>Unidad</label>
+        <div class="form-group form-full">
+
+            <label>
+                Unidad
+            </label>
 
             <select
                 name="unit"
@@ -237,9 +249,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             </select>
 
-            <br><br>
+        </div>
 
-            <label>Unidad Personalizada</label>
+        <div class="form-group form-full">
+
+            <label>
+                Unidad Personalizada
+            </label>
 
             <input
                 type="text"
@@ -247,16 +263,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 maxlength="50"
             >
 
-            <br><br>
+        </div>
 
-            <button
-                type="submit"
-                class="btn"
-            >
-                Guardar Producción
-            </button>
+        <div class="form-group form-full">
 
-        </form>
+            <label>
+                Materias Primas
+            </label>
+
+            <textarea
+                name="raw_materials"
+                required
+            ></textarea>
+
+        </div>
+
+    </div>
+
+    <div class="form-actions">
+
+        <button
+            type="submit"
+            class="btn"
+        >
+            Guardar Producción
+        </button>
+
+    </div>
+
+</form>
 
     </div>
 

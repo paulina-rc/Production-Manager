@@ -113,139 +113,232 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
     <meta charset="UTF-8">
+
     <title>Editar Producción</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-<h1>Editar Producción</h1>
+<?php require_once '../includes/sidebar.php'; ?>
 
-<a href="list.php">Volver al Historial</a>
+<div class="main-content">
 
-<br><br>
+    <div class="welcome-box">
 
-<?php if (!empty($error)): ?>
-    <p><?php echo $error; ?></p>
-<?php endif; ?>
+        <h1>Editar Producción</h1>
 
-<form method="POST">
+        <p>
+            Modifique la información del registro seleccionado.
+        </p>
 
-    <label>Fecha de Producción</label>
-    <br>
+    </div>
 
-    <input
-        type="date"
-        name="production_date"
-        value="<?php echo htmlspecialchars($production['production_date']); ?>"
-        required
-    >
+    <div class="form-card">
 
-    <br><br>
+        <div class="table-header">
 
-    <label>Producto</label>
-    <br>
+            <h2>Formulario de Edición</h2>
 
-    <select name="product_id" required>
+            <a class="btn"
+               href="view.php?id=<?php echo $id; ?>">
+                Volver al Detalle
+            </a>
 
-        <?php foreach ($products as $product): ?>
+        </div>
 
-            <option
-                value="<?php echo $product['id']; ?>"
-                <?php echo ($product['id'] == $production['product_id']) ? 'selected' : ''; ?>
-            >
-                <?php echo htmlspecialchars($product['name']); ?>
-            </option>
+        <?php if (!empty($error)): ?>
 
-        <?php endforeach; ?>
+            <p style="
+                color:#dc2626;
+                font-weight:bold;
+                margin-bottom:20px;
+            ">
+                <?php echo $error; ?>
+            </p>
 
-    </select>
+        <?php endif; ?>
 
-    <br><br>
+        <form method="POST">
 
-    <label>Materias Primas</label>
-    <br>
+            <div class="form-grid">
 
-    <textarea
-        name="raw_materials"
-        rows="4"
-        cols="50"
-        required
-    ><?php echo htmlspecialchars($production['raw_materials']); ?></textarea>
+                <div class="form-group">
 
-    <br><br>
+                    <label>
+                        Fecha de Producción
+                    </label>
 
-    <label>Sección</label>
-    <br>
+                    <input
+                        type="date"
+                        name="production_date"
+                        value="<?php echo htmlspecialchars($production['production_date']); ?>"
+                        required
+                    >
 
-    <select name="section_id" required>
+                </div>
 
-        <?php foreach ($sections as $section): ?>
+                <div class="form-group">
 
-            <option
-                value="<?php echo $section['id']; ?>"
-                <?php echo ($section['id'] == $production['section_id']) ? 'selected' : ''; ?>
-            >
-                <?php echo htmlspecialchars($section['name']); ?>
-            </option>
+                    <label>
+                        Producto
+                    </label>
 
-        <?php endforeach; ?>
+                    <select
+                        name="product_id"
+                        required
+                    >
 
-    </select>
+                        <?php foreach ($products as $product): ?>
 
-    <br><br>
+                            <option
+                                value="<?php echo $product['id']; ?>"
+                                <?php echo ($product['id'] == $production['product_id']) ? 'selected' : ''; ?>
+                            >
+                                <?php echo htmlspecialchars($product['name']); ?>
+                            </option>
 
-    <label>Cantidad</label>
-    <br>
+                        <?php endforeach; ?>
 
-    <input
-        type="number"
-        step="0.01"
-        min="0.01"
-        name="quantity"
-        value="<?php echo htmlspecialchars($production['quantity']); ?>"
-        required
-    >
+                    </select>
 
-    <br><br>
+                </div>
 
-    <label>Unidad</label>
-    <br>
+                <div class="form-group">
 
-    <select name="unit" required>
+                    <label>
+                        Sección
+                    </label>
 
-        <option value="Units" <?php echo ($production['unit'] == 'Units') ? 'selected' : ''; ?>>Unidades</option>
+                    <select
+                        name="section_id"
+                        required
+                    >
 
-        <option value="Kilograms" <?php echo ($production['unit'] == 'Kilograms') ? 'selected' : ''; ?>>Kilogramos</option>
+                        <?php foreach ($sections as $section): ?>
 
-        <option value="Grams" <?php echo ($production['unit'] == 'Grams') ? 'selected' : ''; ?>>Gramos</option>
+                            <option
+                                value="<?php echo $section['id']; ?>"
+                                <?php echo ($section['id'] == $production['section_id']) ? 'selected' : ''; ?>
+                            >
+                                <?php echo htmlspecialchars($section['name']); ?>
+                            </option>
 
-        <option value="Liters" <?php echo ($production['unit'] == 'Liters') ? 'selected' : ''; ?>>Litros</option>
+                        <?php endforeach; ?>
 
-        <option value="Milliliters" <?php echo ($production['unit'] == 'Milliliters') ? 'selected' : ''; ?>>Mililitros</option>
+                    </select>
 
-        <option value="Other" <?php echo ($production['unit'] == 'Other') ? 'selected' : ''; ?>>Otro</option>
+                </div>
 
-    </select>
+                <div class="form-group">
 
-    <br><br>
+                    <label>
+                        Cantidad
+                    </label>
 
-    <label>Unidad Personalizada</label>
-    <br>
+                    <input
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        name="quantity"
+                        value="<?php echo htmlspecialchars($production['quantity']); ?>"
+                        required
+                    >
 
-    <input
-        type="text"
-        name="custom_unit"
-        value="<?php echo htmlspecialchars($production['custom_unit']); ?>"
-        maxlength="50"
-    >
+                </div>
 
-    <br><br>
+                <div class="form-group form-full">
 
-    <button type="submit">
-        Guardar Cambios
-    </button>
+                    <label>
+                        Unidad
+                    </label>
 
-</form>
+                    <select
+                        name="unit"
+                        required
+                    >
+
+                        <option value="Units" <?php echo ($production['unit'] == 'Units') ? 'selected' : ''; ?>>
+                            Unidades
+                        </option>
+
+                        <option value="Kilograms" <?php echo ($production['unit'] == 'Kilograms') ? 'selected' : ''; ?>>
+                            Kilogramos
+                        </option>
+
+                        <option value="Grams" <?php echo ($production['unit'] == 'Grams') ? 'selected' : ''; ?>>
+                            Gramos
+                        </option>
+
+                        <option value="Liters" <?php echo ($production['unit'] == 'Liters') ? 'selected' : ''; ?>>
+                            Litros
+                        </option>
+
+                        <option value="Milliliters" <?php echo ($production['unit'] == 'Milliliters') ? 'selected' : ''; ?>>
+                            Mililitros
+                        </option>
+
+                        <option value="Other" <?php echo ($production['unit'] == 'Other') ? 'selected' : ''; ?>>
+                            Otro
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group form-full">
+
+                    <label>
+                        Unidad Personalizada
+                    </label>
+
+                    <input
+                        type="text"
+                        name="custom_unit"
+                        value="<?php echo htmlspecialchars($production['custom_unit']); ?>"
+                        maxlength="50"
+                    >
+
+                </div>
+
+                <div class="form-group form-full">
+
+                    <label>
+                        Materias Primas
+                    </label>
+
+                    <textarea
+                        name="raw_materials"
+                        required
+                    ><?php echo htmlspecialchars($production['raw_materials']); ?></textarea>
+
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Guardar Cambios
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
 
 </body>
 </html>
