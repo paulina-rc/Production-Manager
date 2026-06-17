@@ -1,4 +1,6 @@
 <?php
+require_once '../config/permissions.php';
+requireAdmin();
 
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';

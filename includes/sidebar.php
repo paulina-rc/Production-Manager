@@ -1,47 +1,63 @@
+<?php
+require_once __DIR__ . '/../config/permissions.php';
+?>
+
 <div class="sidebar">
 
+    <div class="sidebar-logo">
 
-<h2>🌱 Agro Manager</h2>
+        <h2>
+            Agroindustrias
+        </h2>
 
-<a href="../dashboard/index.php">
-    📊 Dashboard
-</a>
+        <span>
+            Production Manager
+        </span>
 
-<a href="../products/list.php">
-    📦 Productos
-</a>
+    </div>
 
-<a href="../users/list.php">
-    👥 Usuarios
-</a>
+    <div class="sidebar-menu">
 
-<a href="../sections/list.php">
-    🏫 Secciones
-</a>
+        <a href="../dashboard/index.php">
+            Dashboard
+        </a>
 
-<a href="../productions/list.php">
-    🧪 Producciones
-</a>
+        <?php if (isAdmin()): ?>
 
-<a href="../reports/monthly.php">
-    📈 Reporte Mensual
-</a>
+            <a href="../products/list.php">
+                Productos
+            </a>
 
-<a href="../reports/semester.php">
-    📈 Reporte Semestral
-</a>
+            <a href="../users/list.php">
+                Usuarios
+            </a>
 
-<a href="../reports/yearly.php">
-    📈 Reporte Anual
-</a>
+            <a href="../sections/list.php">
+                Secciones
+            </a>
 
-<a href="../users/profile.php">
-    👤 Mi Perfil
-</a>
+        <?php endif; ?>
 
-<a href="../auth/logout.php">
-    🚪 Cerrar Sesión
-</a>
+        <a href="../productions/list.php">
+            Producciones
+        </a>
 
+        <a href="../reports/monthly.php">
+            Reportes
+        </a>
+
+    </div>
+
+    <div class="sidebar-footer">
+
+        <a href="../users/profile.php">
+            Perfil
+        </a>
+
+        <a href="../auth/logout.php">
+            Salir
+        </a>
+
+    </div>
 
 </div>
