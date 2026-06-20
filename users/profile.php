@@ -25,6 +25,60 @@ if (!$user) {
     exit;
 }
 
+$message = '';
+$error = '';
+
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST'
+    && isset($_POST['change_password'])
+) {
+
+    $currentPassword = $_POST['current_password'] ?? '';
+    $newPassword = $_POST['new_password'] ?? '';
+    $confirmPassword = $_POST['confirm_password'] ?? '';
+
+    if (
+        empty($currentPassword)
+        || empty($newPassword)
+        || empty($confirmPassword)
+    ) {
+
+        $error = 'Todos los campos son obligatorios.';
+
+    } elseif (!password_verify($currentPassword, $user['password'])) {
+
+        $error = 'La contraseña actual es incorrecta.';
+
+    } elseif ($newPassword !== $confirmPassword) {
+
+        $error = 'Las nuevas contraseñas no coinciden.';
+
+    } elseif (strlen($newPassword) < 8) {
+
+        $error = 'La nueva contraseña debe tener al menos 8 caracteres.';
+
+    } else {
+
+        $newHash = password_hash(
+            $newPassword,
+            PASSWORD_DEFAULT
+        );
+
+        $updateStmt = $pdo->prepare("
+            UPDATE users
+            SET password = ?
+            WHERE id = ?
+        ");
+
+        $updateStmt->execute([
+            $newHash,
+            $user['id']
+        ]);
+
+        $message = 'Contraseña actualizada correctamente.';
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -91,6 +145,18 @@ if (!$user) {
 
             <hr>
 
+            <?php if (!empty($message)): ?>
+                <div class="success-message">
+                    <?php echo htmlspecialchars($message); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($error)): ?>
+                <div class="error-message">
+                    <?php echo htmlspecialchars($error); ?>
+                </div>
+            <?php endif; ?>
+
             <h3>Cambiar Contraseña</h3>
 
             <form method="POST">
@@ -121,7 +187,7 @@ if (!$user) {
                 >
 
                 <br><br>
-
+                
                 <button
                     type="submit"
                     name="change_password"
