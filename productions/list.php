@@ -3,7 +3,9 @@
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
 
-$stmt = $pdo->query("
+$search = trim($_GET['search'] ?? '');
+
+$sql = "
     SELECT
         productions.id,
         productions.production_date,
@@ -32,9 +34,35 @@ $stmt = $pdo->query("
         ON productions.section_id = sections.id
 
     WHERE productions.deleted_at IS NULL
+";
 
-    ORDER BY productions.production_date DESC
-");
+$params = [];
+
+if (!empty($search)) {
+
+    $sql .= "
+        AND (
+            products.name LIKE ?
+            OR processor.full_name LIKE ?
+            OR creator.full_name LIKE ?
+            OR sections.name LIKE ?
+        )
+    ";
+
+    $searchTerm = '%' . $search . '%';
+
+    $params = [
+        $searchTerm,
+        $searchTerm,
+        $searchTerm,
+        $searchTerm
+    ];
+}
+
+$sql .= " ORDER BY productions.production_date DESC";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
 
 $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -62,7 +90,7 @@ $totalProductions = count($productions);
 
     <div class="welcome-box">
 
-        <h1>🧪 Producciones</h1>
+        <h1>Producciones</h1>
 
         <p>
             Historial completo de producciones registradas.
@@ -93,6 +121,39 @@ $totalProductions = count($productions);
             </a>
 
         </div>
+
+        <form method="GET" style="margin-bottom:20px;">
+
+            <form method="GET" style="margin-bottom:20px;">
+
+        
+        <input
+            type="text"
+            name="search"
+            placeholder="Buscar producto, usuario o sección..."
+            value="<?php echo htmlspecialchars($search); ?>"
+            style="width:100%; padding:10px; border-radius:8px;"
+        >
+
+        <button
+            type="submit"
+            class="btn"
+            style="margin-top:10px;"
+        >
+            Buscar
+        </button>
+        
+
+</form>
+
+
+        </form>
+
+        <?php if (empty($productions)): ?>
+
+            <p>No se encontraron producciones.</p>
+
+        <?php else: ?>
 
         <table class="table">
 
@@ -165,9 +226,12 @@ $totalProductions = count($productions);
 
         </table>
 
+        <?php endif; ?>
+
     </div>
 
 </div>
 
 </body>
 </html>
+
