@@ -1,4 +1,5 @@
 <?php
+
 require_once '../config/permissions.php';
 requireAdmin();
 
@@ -38,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($name)) {
 
-        $error = 'Section name is required';
+        $error = 'El nombre de la sección es obligatorio';
 
     } else {
 
@@ -54,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->fetch()) {
 
-            $error = 'Section already exists';
+            $error = 'La sección ya existe';
 
         } else {
 
@@ -72,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id
             ]);
 
-            $success = 'Section updated successfully';
+            $success = 'Sección actualizada correctamente';
 
             $stmt = $pdo->prepare("
                 SELECT *
@@ -90,68 +91,115 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Section</title>
+
+    <title>Editar Sección</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-<h1>Edit Section</h1>
+<?php require_once '../includes/sidebar.php'; ?>
 
-<a href="list.php">Back to Sections</a>
+<div class="main-content">
 
-<br><br>
+    <div class="welcome-box">
 
-<?php if (!empty($error)): ?>
-    <p><?php echo $error; ?></p>
-<?php endif; ?>
+        <h1>Editar Sección</h1>
 
-<?php if (!empty($success)): ?>
-    <p><?php echo $success; ?></p>
-<?php endif; ?>
+        <p>
+            Modificar la información de una sección.
+        </p>
 
-<form method="POST">
+    </div>
 
-    <label>Section Name</label>
+    <div class="form-card">
 
-    <br>
+        <?php if (!empty($error)): ?>
 
-    <input
-        type="text"
-        name="name"
-        value="<?php echo htmlspecialchars($section['name']); ?>"
-        required
-    >
+            <div class="badge badge-danger">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
 
-    <br><br>
+            <br><br>
 
-    <label>Status</label>
+        <?php endif; ?>
 
-    <br>
+        <?php if (!empty($success)): ?>
 
-    <select name="active">
+            <div class="badge badge-success">
+                <?php echo htmlspecialchars($success); ?>
+            </div>
 
-        <option value="1"
-            <?php echo ($section['active'] == 1) ? 'selected' : ''; ?>>
-            Active
-        </option>
+            <br><br>
 
-        <option value="0"
-            <?php echo ($section['active'] == 0) ? 'selected' : ''; ?>>
-            Inactive
-        </option>
+        <?php endif; ?>
 
-    </select>
+        <form method="POST">
 
-    <br><br>
+            <div class="form-group">
 
-    <button type="submit">
-        Save Changes
-    </button>
+                <label>Nombre de la Sección</label>
 
-</form>
+                <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    value="<?php echo htmlspecialchars($section['name']); ?>"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Estado</label>
+
+                <select
+                    name="active"
+                    class="form-control"
+                >
+
+                    <option value="1"
+                        <?php echo ($section['active'] == 1) ? 'selected' : ''; ?>>
+                        Activa
+                    </option>
+
+                    <option value="0"
+                        <?php echo ($section['active'] == 0) ? 'selected' : ''; ?>>
+                        Inactiva
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="page-header-actions">
+
+                <a href="list.php"
+                   class="btn btn-secondary">
+                    Cancelar
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn">
+                    Guardar Cambios
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 </body>
 </html>
+
