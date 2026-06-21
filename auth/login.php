@@ -68,6 +68,9 @@ if (isset($_SESSION['user_id'])) {
         <input type="password" name="password" required><br><br>
 
         <button type="submit">Login</button>
+        <a href="forgot_password.php">
+            ¿Olvidaste tu contraseña?
+        </a>
 
     </form>
 

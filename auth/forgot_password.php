@@ -1,5 +1,6 @@
 <?php
 
+require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/config/mail.php';
 
 $message = '';
@@ -7,25 +8,98 @@ $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    try {
+    $email = trim($_POST['email']);
 
-        $mail = getMailer();
+    $stmt = $pdo->prepare("
+        SELECT *
+        FROM users
+        WHERE email = ?
+        LIMIT 1
+    ");
 
-        $mail->addAddress($_POST['email']);
+    $stmt->execute([$email]);
 
-        $mail->Subject = 'Prueba de correo';
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $mail->Body = '
-            Este es un correo de prueba enviado desde Production Manager.
-        ';
+    if ($user) {
 
-        $mail->send();
+        $token = bin2hex(random_bytes(32));
 
-        $message = 'Correo enviado correctamente.';
+        $expires = date(
+            'Y-m-d H:i:s',
+            strtotime('+1 hour')
+        );
 
-    } catch (Exception $e) {
+        $updateStmt = $pdo->prepare("
+            UPDATE users
+            SET
+                reset_token = ?,
+                reset_token_expires = ?
+            WHERE id = ?
+        ");
 
-        $error = $e->getMessage();
+        $updateStmt->execute([
+            $token,
+            $expires,
+            $user['id']
+        ]);
+
+        try {
+
+            $env = parse_ini_file(
+                dirname(__DIR__) . '/.env'
+            );
+
+            $resetLink =
+                $env['APP_URL']
+                . '/auth/reset_password.php?token='
+                . $token;
+
+            $mail = getMailer();
+
+            $mail->addAddress($email);
+
+            $mail->Subject =
+                'Recuperación de contraseña';
+
+            $mail->isHTML(true);
+
+            $mail->Body = "
+                <h2>Recuperación de contraseña</h2>
+
+                <p>
+                    Hemos recibido una solicitud para
+                    restablecer tu contraseña.
+                </p>
+
+                <p>
+                    Haz clic en el siguiente enlace:
+                </p>
+
+                <p>
+                    <a href='{$resetLink}'>
+                        Restablecer contraseña
+                    </a>
+                </p>
+
+                <p>
+                    Este enlace expirará en 1 hora.
+                </p>
+            ";
+
+            $mail->send();
+
+            $message =
+                'Se ha enviado un enlace de recuperación a tu correo.';
+
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+        }
+
+    } else {
+
+        $error = 'No existe una cuenta con ese correo.';
     }
 }
 
@@ -34,10 +108,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Prueba de Correo</title>
 
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <meta charset="UTF-8">
+
+    <title>Recuperar Contraseña</title>
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/style.css"
+    >
+
 </head>
 <body>
 
@@ -45,10 +125,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="welcome-box">
 
-        <h1>Prueba de Correo</h1>
+        <h1>Recuperar Contraseña</h1>
 
         <p>
-            Verificar configuración SMTP.
+            Ingresa tu correo para recibir un enlace de recuperación.
         </p>
 
     </div>
@@ -56,16 +136,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="table-card">
 
         <?php if (!empty($message)): ?>
-            <p><?php echo htmlspecialchars($message); ?></p>
+
+            <p>
+                <?php echo htmlspecialchars($message); ?>
+            </p>
+
         <?php endif; ?>
 
         <?php if (!empty($error)): ?>
-            <p><?php echo htmlspecialchars($error); ?></p>
+
+            <p>
+                <?php echo htmlspecialchars($error); ?>
+            </p>
+
         <?php endif; ?>
 
         <form method="POST">
 
-            <label>Correo destino</label>
+            <label>Correo electrónico</label>
 
             <input
                 type="email"
@@ -79,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 type="submit"
                 class="btn"
             >
-                Enviar prueba
+                Enviar enlace
             </button>
 
         </form>
@@ -90,4 +178,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </body>
 </html>
-```
+
