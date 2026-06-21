@@ -1,4 +1,5 @@
 <?php
+
 require_once '../config/permissions.php';
 requireAdmin();
 
@@ -14,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($name)) {
 
-        $error = 'Product name is required';
+        $error = 'El nombre del producto es obligatorio';
 
     } else {
 
@@ -29,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->fetch()) {
 
-            $error = 'Product already exists';
+            $error = 'El producto ya existe';
 
         } else {
 
@@ -43,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $stmt->execute([$name]);
 
-            $success = 'Product created successfully';
+            $success = 'Producto creado correctamente';
         }
     }
 }
@@ -51,47 +52,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Product</title>
+
+    <title>Nuevo Producto</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-    <h1>Create Product</h1>
+<?php require_once '../includes/sidebar.php'; ?>
 
-    <a href="list.php">Back to Products</a>
+<div class="main-content">
 
-    <br><br>
+    <div class="welcome-box">
 
-    <?php if (!empty($error)): ?>
-        <p><?php echo $error; ?></p>
-    <?php endif; ?>
+        <h1>Nuevo Producto</h1>
 
-    <?php if (!empty($success)): ?>
-        <p><?php echo $success; ?></p>
-    <?php endif; ?>
+        <p>
+            Registrar un nuevo producto en el sistema.
+        </p>
 
-    <form method="POST">
+    </div>
 
-        <label>Product Name</label>
-        <br>
+    <div class="form-card">
 
-        <input
-            type="text"
-            name="name"
-            maxlength="150"
-            required
-        >
+        <?php if (!empty($error)): ?>
 
-        <br><br>
+            <div class="badge badge-danger">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
 
-        <button type="submit">
-            Save Product
-        </button>
+            <br><br>
 
-    </form>
+        <?php endif; ?>
+
+        <?php if (!empty($success)): ?>
+
+            <div class="badge badge-success">
+                <?php echo htmlspecialchars($success); ?>
+            </div>
+
+            <br><br>
+
+        <?php endif; ?>
+
+        <form method="POST">
+
+            <div class="form-group">
+
+                <label>Nombre del Producto</label>
+
+                <input
+                    type="text"
+                    name="name"
+                    maxlength="150"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+            <div class="page-header-actions">
+
+                <a href="list.php"
+                   class="btn btn-secondary">
+                    Cancelar
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn">
+                    Guardar Producto
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 </body>
 </html>
+
