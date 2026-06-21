@@ -1,4 +1,5 @@
 <?php
+
 require_once '../config/permissions.php';
 requireAdmin();
 
@@ -23,61 +24,121 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users</title>
+
+    <title>Usuarios</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-<h1>Users</h1>
-<a href="create.php">Create User</a>
+<?php require_once '../includes/sidebar.php'; ?>
 
-<br><br>
+<div class="main-content">
 
-<a href="../dashboard/index.php">Dashboard</a>
+    <div class="welcome-box">
 
-<br><br>
+        <h1>Usuarios</h1>
 
-<table border="1">
+        <p>
+            Administración de usuarios y permisos del sistema.
+        </p>
 
-    <tr>
-        <th>ID</th>
-        <th>Full Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
+    </div>
 
-    <?php foreach ($users as $user): ?>
+    <div class="stats-container">
 
-        <tr>
+        <div class="stat-card">
 
-            <td><?php echo $user['id']; ?></td>
+            <h3>Total Usuarios</h3>
 
-            <td><?php echo htmlspecialchars($user['full_name']); ?></td>
+            <div class="stat-number">
+                <?php echo count($users); ?>
+            </div>
 
-            <td><?php echo htmlspecialchars($user['email']); ?></td>
+        </div>
 
-            <td><?php echo htmlspecialchars($user['role_name']); ?></td>
+    </div>
 
-            <td>
-                <?php echo $user['status'] ? 'Active' : 'Inactive'; ?>
-            </td>
+    <div class="table-card">
 
-            <td>
-                <a href="edit.php?id=<?php echo $user['id']; ?>">
-                    Edit
-                </a>
-            </td>
+        <div class="table-header">
 
-        </tr>
+            <h2>Lista de Usuarios</h2>
 
-    <?php endforeach; ?>
+            <a class="btn"
+               href="create.php">
+                + Nuevo Usuario
+            </a>
 
-</table>
+        </div>
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre Completo</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            <?php foreach ($users as $user): ?>
+
+                <tr>
+
+                    <td>
+                        <?php echo $user['id']; ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars($user['full_name']); ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars($user['email']); ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars($user['role_name']); ?>
+                    </td>
+
+                    <td>
+                        <?php echo $user['status'] ? 'Activo' : 'Inactivo'; ?>
+                    </td>
+
+                    <td class="action-links">
+
+                        <a href="edit.php?id=<?php echo $user['id']; ?>">
+                            Editar
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            <?php endforeach; ?>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 
 </body>
 </html>
+
