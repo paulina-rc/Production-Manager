@@ -1,3 +1,4 @@
+
 <?php
 
 session_start();
@@ -33,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } else {
 
-        $error = 'Invalid email or password';
+        $error = 'Correo o contraseña incorrectos';
 
     }
 }
@@ -46,33 +47,148 @@ if (isset($_SESSION['user_id'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login-production manager</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Production Manager</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
-<body>
+<body style="background:#f4f6f9;">
 
-    <h1>Production Manager</h1>
+<div style="
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+">
 
-    <?php if (!empty($error)): ?>
-        <p><?php echo $error; ?></p>
-    <?php endif; ?>
-    <form method="POST">
+    <div class="form-card"
+         style="
+            width:450px;
+            max-width:95%;
+         ">
 
-        <label>Email</label><br>
-        <input type="email" name="email" required><br><br>
+        <div style="text-align:center; margin-bottom:30px;">
 
-        <label>Password</label><br>
-        <input type="password" name="password" required><br><br>
+            <h1 style="margin-bottom:10px;">
+                Production Manager
+            </h1>
 
-        <button type="submit">Login</button>
-        <a href="forgot_password.php">
-            ¿Olvidaste tu contraseña?
-        </a>
+            <p style="color:#666;">
+                Sistema de Gestión de Producción Agroindustrial
+            </p>
 
-    </form>
+        </div>
+
+        <?php if (!empty($error)): ?>
+
+            <div class="badge badge-danger">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
+
+            <br><br>
+
+        <?php endif; ?>
+
+        <form method="POST">
+
+            <div class="form-group">
+
+                <label>Correo Electrónico</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Contraseña</label>
+
+                <div style="position:relative;">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        onclick="togglePassword()"
+                        style="
+                            position:absolute;
+                            right:10px;
+                            top:50%;
+                            transform:translateY(-50%);
+                            border:none;
+                            background:none;
+                            cursor:pointer;
+                            font-size:18px;
+                        "
+                    >
+                        👁
+                    </button>
+
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn"
+                style="
+                    width:100%;
+                    margin-bottom:15px;
+                "
+            >
+                Iniciar Sesión
+            </button>
+
+        </form>
+
+        <div style="text-align:center;">
+
+            <a href="forgot_password.php">
+                ¿Olvidaste tu contraseña?
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function togglePassword() {
+
+    const input =
+        document.getElementById('password');
+
+    if (input.type === 'password') {
+        input.type = 'text';
+    } else {
+        input.type = 'password';
+    }
+}
+
+</script>
 
 </body>
 </html>
+
