@@ -1,4 +1,5 @@
 <?php
+
 require_once '../config/permissions.php';
 requireAdmin();
 
@@ -29,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         empty($roleId)
     ) {
 
-        $error = 'All fields are required';
+        $error = 'Todos los campos son obligatorios';
 
     } else {
 
@@ -44,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->fetch()) {
 
-            $error = 'Email already exists';
+            $error = 'El correo ya existe';
 
         } else {
 
@@ -80,70 +81,134 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create User</title>
+
+    <title>Nuevo Usuario</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-<h1>Create User</h1>
+<?php require_once '../includes/sidebar.php'; ?>
 
-<a href="list.php">Back to Users</a>
+<div class="main-content">
 
-<br><br>
+    <div class="welcome-box">
 
-<?php if (!empty($error)): ?>
-    <p><?php echo $error; ?></p>
-<?php endif; ?>
+        <h1>Nuevo Usuario</h1>
 
-<form method="POST">
+        <p>
+            Registrar un nuevo usuario en el sistema.
+        </p>
 
-    <label>Full Name</label>
-    <br>
-    <input type="text" name="full_name" required>
+    </div>
 
-    <br><br>
+    <div class="form-card">
 
-    <label>Email</label>
-    <br>
-    <input type="email" name="email" required>
+        <?php if (!empty($error)): ?>
 
-    <br><br>
+            <div class="badge badge-danger">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
 
-    <label>Password</label>
-    <br>
-    <input type="password" name="password" required>
+            <br><br>
 
-    <br><br>
+        <?php endif; ?>
 
-    <label>Role</label>
-    <br>
+        <form method="POST">
 
-    <select name="role_id" required>
+            <div class="form-group">
 
-        <option value="">
-            Select a role
-        </option>
+                <label>Nombre Completo</label>
 
-        <?php foreach ($roles as $role): ?>
+                <input
+                    type="text"
+                    name="full_name"
+                    class="form-control"
+                    required
+                >
 
-            <option value="<?php echo $role['id']; ?>">
-                <?php echo htmlspecialchars($role['role_name']); ?>
-            </option>
+            </div>
 
-        <?php endforeach; ?>
+            <div class="form-group">
 
-    </select>
+                <label>Correo Electrónico</label>
 
-    <br><br>
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    required
+                >
 
-    <button type="submit">
-        Create User
-    </button>
+            </div>
 
-</form>
+            <div class="form-group">
+
+                <label>Contraseña</label>
+
+                <input
+                    type="password"
+                    name="password"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Rol</label>
+
+                <select
+                    name="role_id"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Seleccione un rol
+                    </option>
+
+                    <?php foreach ($roles as $role): ?>
+
+                        <option value="<?php echo $role['id']; ?>">
+                            <?php echo htmlspecialchars($role['role_name']); ?>
+                        </option>
+
+                    <?php endforeach; ?>
+
+                </select>
+
+            </div>
+
+            <div class="page-header-actions">
+
+                <a href="list.php"
+                   class="btn btn-secondary">
+                    Cancelar
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Crear Usuario
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 </body>
 </html>
+
