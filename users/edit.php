@@ -1,4 +1,6 @@
+```php
 <?php
+
 require_once '../config/permissions.php';
 requireAdmin();
 
@@ -52,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         empty($roleId)
     ) {
 
-        $error = 'All fields are required';
+        $error = 'Todos los campos son obligatorios';
 
     } else {
 
@@ -68,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->fetch()) {
 
-            $error = 'Email already exists';
+            $error = 'El correo ya existe';
 
         } else {
 
@@ -90,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id
             ]);
 
-            $success = 'User updated successfully';
+            $success = 'Usuario actualizado correctamente';
 
             $stmt = $pdo->prepare("
                 SELECT *
@@ -108,98 +110,157 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User</title>
+
+    <title>Editar Usuario</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-<h1>Edit User</h1>
+<?php require_once '../includes/sidebar.php'; ?>
 
-<a href="list.php">Back to Users</a>
+<div class="main-content">
 
-<br><br>
+    <div class="welcome-box">
 
-<?php if (!empty($error)): ?>
-    <p><?php echo $error; ?></p>
-<?php endif; ?>
+        <h1>Editar Usuario</h1>
 
-<?php if (!empty($success)): ?>
-    <p><?php echo $success; ?></p>
-<?php endif; ?>
+        <p>
+            Modificar información y permisos del usuario.
+        </p>
 
-<form method="POST">
+    </div>
 
-    <label>Full Name</label>
-    <br>
-    <input
-        type="text"
-        name="full_name"
-        value="<?php echo htmlspecialchars($user['full_name']); ?>"
-        required
-    >
+    <div class="form-card">
 
-    <br><br>
+        <?php if (!empty($error)): ?>
 
-    <label>Email</label>
-    <br>
-    <input
-        type="email"
-        name="email"
-        value="<?php echo htmlspecialchars($user['email']); ?>"
-        required
-    >
+            <div class="badge badge-danger">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
 
-    <br><br>
+            <br><br>
 
-    <label>Role</label>
-    <br>
+        <?php endif; ?>
 
-    <select name="role_id" required>
+        <?php if (!empty($success)): ?>
 
-        <?php foreach ($roles as $role): ?>
+            <div class="badge badge-success">
+                <?php echo htmlspecialchars($success); ?>
+            </div>
 
-            <option
-                value="<?php echo $role['id']; ?>"
-                <?php echo ($role['id'] == $user['role_id']) ? 'selected' : ''; ?>
-            >
-                <?php echo htmlspecialchars($role['role_name']); ?>
-            </option>
+            <br><br>
 
-        <?php endforeach; ?>
+        <?php endif; ?>
 
-    </select>
+        <form method="POST">
 
-    <br><br>
+            <div class="form-group">
 
-    <label>Status</label>
-    <br>
+                <label>Nombre Completo</label>
 
-    <select name="status">
+                <input
+                    type="text"
+                    name="full_name"
+                    class="form-control"
+                    value="<?php echo htmlspecialchars($user['full_name']); ?>"
+                    required
+                >
 
-        <option value="1"
-            <?php echo ($user['status'] == 1) ? 'selected' : ''; ?>
-        >
-            Active
-        </option>
+            </div>
 
-        <option value="0"
-            <?php echo ($user['status'] == 0) ? 'selected' : ''; ?>
-        >
-            Inactive
-        </option>
+            <div class="form-group">
 
-    </select>
+                <label>Correo Electrónico</label>
 
-    <br><br>
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    value="<?php echo htmlspecialchars($user['email']); ?>"
+                    required
+                >
 
-    <button type="submit">
-        Save Changes
-    </button>
+            </div>
 
-</form>
+            <div class="form-group">
+
+                <label>Rol</label>
+
+                <select
+                    name="role_id"
+                    class="form-control"
+                    required
+                >
+
+                    <?php foreach ($roles as $role): ?>
+
+                        <option
+                            value="<?php echo $role['id']; ?>"
+                            <?php echo ($role['id'] == $user['role_id']) ? 'selected' : ''; ?>
+                        >
+                            <?php echo htmlspecialchars($role['role_name']); ?>
+                        </option>
+
+                    <?php endforeach; ?>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Estado</label>
+
+                <select
+                    name="status"
+                    class="form-control"
+                >
+
+                    <option value="1"
+                        <?php echo ($user['status'] == 1) ? 'selected' : ''; ?>
+                    >
+                        Activo
+                    </option>
+
+                    <option value="0"
+                        <?php echo ($user['status'] == 0) ? 'selected' : ''; ?>
+                    >
+                        Inactivo
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="page-header-actions">
+
+                <a href="list.php"
+                   class="btn btn-secondary">
+                    Cancelar
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Guardar Cambios
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 </body>
 </html>
+```
