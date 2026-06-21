@@ -1,4 +1,5 @@
 <?php
+
 require_once '../config/permissions.php';
 requireAdmin();
 
@@ -16,56 +17,125 @@ $sections = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sections</title>
+
+    <title>Secciones</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-<h1>Sections</h1>
+<?php require_once '../includes/sidebar.php'; ?>
 
-<a href="../dashboard/index.php">Dashboard</a>
+<div class="main-content">
 
-<br><br>
+    <div class="welcome-box">
 
-<a href="create.php">Create Section</a>
+        <h1>Secciones</h1>
 
-<br><br>
+        <p>
+            Administración de secciones académicas.
+        </p>
 
-<table border="1">
+    </div>
 
-    <tr>
-        <th>ID</th>
-        <th>Section</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
+    <div class="stats-container">
 
-    <?php foreach ($sections as $section): ?>
+        <div class="stat-card">
 
-        <tr>
+            <h3>Total Secciones</h3>
 
-            <td><?php echo $section['id']; ?></td>
+            <div class="stat-number">
+                <?php echo count($sections); ?>
+            </div>
 
-            <td><?php echo htmlspecialchars($section['name']); ?></td>
+        </div>
 
-            <td>
-                <?php echo $section['active'] ? 'Active' : 'Inactive'; ?>
-            </td>
+    </div>
 
-            <td>
-                <a href="edit.php?id=<?php echo $section['id']; ?>">
-                    Edit
-                </a>
-            </td>
+    <div class="table-card">
 
-        </tr>
+        <div class="table-header">
 
-    <?php endforeach; ?>
+            <h2>Lista de Secciones</h2>
 
-</table>
+            <a class="btn"
+               href="create.php">
+                + Nueva Sección
+            </a>
+
+        </div>
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Sección</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            <?php foreach ($sections as $section): ?>
+
+                <tr>
+
+                    <td>
+                        <?php echo $section['id']; ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars($section['name']); ?>
+                    </td>
+
+                    <td>
+
+                        <?php if ($section['active']): ?>
+
+                            <span class="badge badge-success">
+                                Activa
+                            </span>
+
+                        <?php else: ?>
+
+                            <span class="badge badge-danger">
+                                Inactiva
+                            </span>
+
+                        <?php endif; ?>
+
+                    </td>
+
+                    <td class="action-links">
+
+                        <a href="edit.php?id=<?php echo $section['id']; ?>">
+                            Editar
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            <?php endforeach; ?>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 
 </body>
 </html>
+
