@@ -1,4 +1,5 @@
 <?php
+
 require_once '../config/permissions.php';
 requireAdmin();
 
@@ -16,55 +17,124 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
+
+    <title>Productos</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-    <h1>Products</h1>
-    <a href="create.php">Create Product</a>
+<?php require_once '../includes/sidebar.php'; ?>
 
-    <br><br>
+<div class="main-content">
 
-    <a href="../dashboard/index.php">Dashboard</a>
+    <div class="welcome-box">
 
-    <br><br>
+        <h1>Productos</h1>
 
-    <table border="1">
+        <p>
+            Administración de productos registrados en el sistema.
+        </p>
 
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
+    </div>
 
-        <?php foreach ($products as $product): ?>
+    <div class="stats-container">
 
-            <tr>
+        <div class="stat-card">
 
-                <td><?php echo $product['id']; ?></td>
+            <h3>Total Productos</h3>
 
-                <td><?php echo htmlspecialchars($product['name']); ?></td>
+            <div class="stat-number">
+                <?php echo count($products); ?>
+            </div>
 
-                <td>
-                    <?php echo $product['active'] ? 'Active' : 'Inactive'; ?>
-                </td>
+        </div>
 
-                <td>
-                    <a href="edit.php?id=<?php echo $product['id']; ?>">
-                        Edit
-                    </a>
-                </td>
+    </div>
 
-            </tr>
+    <div class="table-card">
 
-        <?php endforeach; ?>
+        <div class="table-header">
 
-    </table>
+            <h2>Lista de Productos</h2>
+
+            <a class="btn"
+               href="create.php">
+                + Nuevo Producto
+            </a>
+
+        </div>
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Producto</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            <?php foreach ($products as $product): ?>
+
+                <tr>
+
+                    <td>
+                        <?php echo $product['id']; ?>
+                    </td>
+
+                    <td>
+                        <?php echo htmlspecialchars($product['name']); ?>
+                    </td>
+
+                    <td>
+
+                        <?php if ($product['active']): ?>
+
+                            <span class="badge badge-success">
+                                Activo
+                            </span>
+
+                        <?php else: ?>
+
+                            <span class="badge badge-danger">
+                                Inactivo
+                            </span>
+
+                        <?php endif; ?>
+
+                    </td>
+
+                    <td class="action-links">
+
+                        <a href="edit.php?id=<?php echo $product['id']; ?>">
+                            Editar
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            <?php endforeach; ?>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 
 </body>
 </html>
