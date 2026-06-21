@@ -1,4 +1,6 @@
+```php
 <?php
+
 require_once '../config/permissions.php';
 requireAdmin();
 
@@ -37,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($name)) {
 
-        $error = 'Product name is required';
+        $error = 'El nombre del producto es obligatorio';
 
     } else {
 
@@ -53,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->fetch()) {
 
-            $error = 'Product already exists';
+            $error = 'El producto ya existe';
 
         } else {
 
@@ -65,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $stmt->execute([$name, $id]);
 
-            $success = 'Product updated successfully';
+            $success = 'Producto actualizado correctamente';
 
             $stmt = $pdo->prepare("
                 SELECT *
@@ -83,48 +85,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product</title>
+
+    <title>Editar Producto</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-<h1>Edit Product</h1>
+<?php require_once '../includes/sidebar.php'; ?>
 
-<a href="list.php">Back to Products</a>
+<div class="main-content">
 
-<br><br>
+    <div class="welcome-box">
 
-<?php if (!empty($error)): ?>
-    <p><?php echo $error; ?></p>
-<?php endif; ?>
+        <h1>Editar Producto</h1>
 
-<?php if (!empty($success)): ?>
-    <p><?php echo $success; ?></p>
-<?php endif; ?>
+        <p>
+            Modificar la información del producto.
+        </p>
 
-<form method="POST">
+    </div>
 
-    <label>Product Name</label>
+    <div class="form-card">
 
-    <br>
+        <?php if (!empty($error)): ?>
 
-    <input
-        type="text"
-        name="name"
-        value="<?php echo htmlspecialchars($product['name']); ?>"
-        required
-    >
+            <div class="badge badge-danger">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
 
-    <br><br>
+            <br><br>
 
-    <button type="submit">
-        Save Changes
-    </button>
+        <?php endif; ?>
 
-</form>
+        <?php if (!empty($success)): ?>
+
+            <div class="badge badge-success">
+                <?php echo htmlspecialchars($success); ?>
+            </div>
+
+            <br><br>
+
+        <?php endif; ?>
+
+        <form method="POST">
+
+            <div class="form-group">
+
+                <label>Nombre del Producto</label>
+
+                <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    value="<?php echo htmlspecialchars($product['name']); ?>"
+                    maxlength="150"
+                    required
+                >
+
+            </div>
+
+            <div class="page-header-actions">
+
+                <a href="list.php"
+                   class="btn btn-secondary">
+                    Cancelar
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn">
+                    Guardar Cambios
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 </body>
 </html>
+```
