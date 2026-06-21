@@ -6,58 +6,77 @@ require_once __DIR__ . '/../config/permissions.php';
 
     <div class="sidebar-logo">
 
-        <h2>
-            Agroindustrias
-        </h2>
+        <div class="logo-icon">
+            <i class="fas fa-seedling"></i>
+        </div>
 
-        <span>
-            Production Manager
-        </span>
+        <div>
+
+            <h2>
+                Agroindustrias
+            </h2>
+
+            <span>
+                Production Manager
+            </span>
+
+        </div>
 
     </div>
 
     <div class="sidebar-menu">
 
         <a href="../dashboard/index.php">
-            Dashboard
+            <i class="fas fa-house"></i>
+            <span>Dashboard</span>
         </a>
 
         <?php if (isAdmin()): ?>
 
             <a href="../products/list.php">
-                Productos
+                <i class="fas fa-box"></i>
+                <span>Productos</span>
             </a>
 
             <a href="../users/list.php">
-                Usuarios
+                <i class="fas fa-users"></i>
+                <span>Usuarios</span>
             </a>
 
             <a href="../sections/list.php">
-                Secciones
+                <i class="fas fa-school"></i>
+                <span>Secciones</span>
             </a>
 
         <?php endif; ?>
 
         <a href="../productions/list.php">
-            Producciones
+            <i class="fas fa-industry"></i>
+            <span>Producciones</span>
         </a>
 
         <a href="../reports/monthly.php">
-            Reportes
+            <i class="fas fa-file-lines"></i>
+            <span>Reportes</span>
         </a>
 
     </div>
 
+    <div class="sidebar-divider"></div>
+
     <div class="sidebar-footer">
 
         <a href="../users/profile.php">
-            Perfil
+            <i class="fas fa-user"></i>
+            <span>Perfil</span>
         </a>
 
         <a href="../auth/logout.php">
-            Salir
+            <i class="fas fa-right-from-bracket"></i>
+            <span>Salir</span>
         </a>
 
     </div>
 
 </div>
+

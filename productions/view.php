@@ -60,7 +60,7 @@ if (!$production) {
     <title>Detalle de Producción</title>
 
     <link rel="stylesheet"
-          href="../assets/css/style.css">
+          HEADER_REPLACED>
 
 </head>
 <body>

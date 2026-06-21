@@ -44,7 +44,7 @@ $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Reporte Anual</title>
 
     <link rel="stylesheet"
-          href="../assets/css/style.css">
+          HEADER_REPLACED>
 
 </head>
 <body>

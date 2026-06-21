@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Registrar Producción</title>
 
     <link rel="stylesheet"
-          href="../assets/css/style.css">
+          HEADER_REPLACED>
 
 </head>
 <body>

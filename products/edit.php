@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Editar Producto</title>
 
     <link rel="stylesheet"
-          href="../assets/css/style.css">
+          HEADER_REPLACED>
 
 </head>
 <body>

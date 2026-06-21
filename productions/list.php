@@ -79,7 +79,7 @@ $totalProductions = count($productions);
     <title>Producciones</title>
 
     <link rel="stylesheet"
-          href="../assets/css/style.css">
+          HEADER_REPLACED>
 
 </head>
 <body>

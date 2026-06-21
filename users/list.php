@@ -32,7 +32,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Usuarios</title>
 
     <link rel="stylesheet"
-          href="../assets/css/style.css">
+          HEADER_REPLACED>
 
 </head>
 <body>

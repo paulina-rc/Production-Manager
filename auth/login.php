@@ -57,8 +57,7 @@ if (isset($_SESSION['user_id'])) {
 
     <title>Production Manager</title>
 
-    <link rel="stylesheet"
-          href="../assets/css/style.css">
+        <?php require_once '../includes/header.php'; ?>
 
 </head>
 <body style="background:#f4f6f9;">

@@ -25,7 +25,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Productos</title>
 
     <link rel="stylesheet"
-          href="../assets/css/style.css">
+          HEADER_REPLACED>
 
 </head>
 <body>

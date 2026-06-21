@@ -88,7 +88,7 @@ if (
     <meta charset="UTF-8">
     <title>Mi Perfil</title>
 
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" HEADER_REPLACED>
 
 </head>
 <body>
