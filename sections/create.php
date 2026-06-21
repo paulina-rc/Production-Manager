@@ -1,4 +1,6 @@
+```php
 <?php
+
 require_once '../config/permissions.php';
 requireAdmin();
 
@@ -13,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($name)) {
 
-        $error = 'Section name is required';
+        $error = 'El nombre de la sección es obligatorio';
 
     } else {
 
@@ -28,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->fetch()) {
 
-            $error = 'Section already exists';
+            $error = 'La sección ya existe';
 
         } else {
 
@@ -51,44 +53,83 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Section</title>
+
+    <title>Nueva Sección</title>
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
 </head>
 <body>
 
-<h1>Create Section</h1>
+<?php require_once '../includes/sidebar.php'; ?>
 
-<a href="list.php">Back to Sections</a>
+<div class="main-content">
 
-<br><br>
+    <div class="welcome-box">
 
-<?php if (!empty($error)): ?>
-    <p><?php echo $error; ?></p>
-<?php endif; ?>
+        <h1>Nueva Sección</h1>
 
-<form method="POST">
+        <p>
+            Registrar una nueva sección académica.
+        </p>
 
-    <label>Section Name</label>
+    </div>
 
-    <br>
+    <div class="form-card">
 
-    <input
-        type="text"
-        name="name"
-        maxlength="20"
-        required
-    >
+        <?php if (!empty($error)): ?>
 
-    <br><br>
+            <div class="badge badge-danger">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
 
-    <button type="submit">
-        Create Section
-    </button>
+            <br><br>
 
-</form>
+        <?php endif; ?>
+
+        <form method="POST">
+
+            <div class="form-group">
+
+                <label>Nombre de la Sección</label>
+
+                <input
+                    type="text"
+                    name="name"
+                    maxlength="20"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+            <div class="page-header-actions">
+
+                <a href="list.php"
+                   class="btn btn-secondary">
+                    Cancelar
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Crear Sección
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 </body>
 </html>
+```
