@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Editar Producto</title>
 
     <link rel="stylesheet"
-          HEADER_REPLACED>
+          <?php require_once '../includes/header.php'; ?>>
 
 </head>
 <body>

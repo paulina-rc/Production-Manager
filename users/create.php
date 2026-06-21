@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Nuevo Usuario</title>
 
     <link rel="stylesheet"
-          HEADER_REPLACED>
+          <?php require_once '../includes/header.php'; ?>>
 
 </head>
 <body>

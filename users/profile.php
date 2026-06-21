@@ -88,7 +88,7 @@ if (
     <meta charset="UTF-8">
     <title>Mi Perfil</title>
 
-    <link rel="stylesheet" HEADER_REPLACED>
+    <link rel="stylesheet" <?php require_once '../includes/header.php'; ?>>
 
 </head>
 <body>

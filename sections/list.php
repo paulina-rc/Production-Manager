@@ -25,7 +25,7 @@ $sections = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Secciones</title>
 
     <link rel="stylesheet"
-          HEADER_REPLACED>
+          <?php require_once '../includes/header.php'; ?>>
 
 </head>
 <body>

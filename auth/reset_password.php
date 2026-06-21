@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <link
         rel="stylesheet"
-        HEADER_REPLACED
+        <?php require_once '../includes/header.php'; ?>
     >
 
 </head>

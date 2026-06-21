@@ -60,7 +60,7 @@ if (!$production) {
     <title>Detalle de Producción</title>
 
     <link rel="stylesheet"
-          HEADER_REPLACED>
+          <?php require_once '../includes/header.php'; ?>>
 
 </head>
 <body>
