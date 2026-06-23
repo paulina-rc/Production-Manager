@@ -1,6 +1,4 @@
-
 <?php
-
 session_start();
 require_once '../config/database.php';
 
@@ -187,6 +185,8 @@ function togglePassword() {
 }
 
 </script>
+
+<?php require_once '../includes/footer.php'; ?>
 
 </body>
 </html>

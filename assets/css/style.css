@@ -536,3 +536,18 @@ textarea {
     padding-bottom: 25px;
 }
 
+.footer {
+    background: red !important;
+    color: white !important;
+    padding: 30px !important;
+    text-align: center !important;
+}   
+
+.footer p {
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.footer span {
+    font-size: 14px;
+}
