@@ -1,50 +1,47 @@
 # DATABASE_CONTEXT.md
 
-# Base de Datos
+# Database
 
-Nombre:
+**Name:**
+`production_manager`
 
-production_manager
-
-Motor:
-
+**Database Engine:**
 MySQL
 
-Acceso mediante:
-
+**Access Method:**
 PDO
 
 ---
 
-# Tabla: roles
+# Table: roles
 
-Propósito:
+## Purpose
 
-Definir permisos generales del sistema.
+Defines the general permissions and access levels within the system.
 
-Campos conocidos:
+## Known Fields
 
 * id (PK)
 * role_name
 
-Ejemplos:
+## Examples
 
-1 = admin
-2 = profesor
+* 1 = admin
+* 2 = professor
 
-Relación:
+## Relationship
 
-roles.id → users.role_id
+`roles.id` → `users.role_id`
 
 ---
 
-# Tabla: users
+# Table: users
 
-Propósito:
+## Purpose
 
-Usuarios que acceden al sistema.
+System users who can access the application.
 
-Campos conocidos:
+## Known Fields
 
 * id
 * full_name
@@ -56,25 +53,25 @@ Campos conocidos:
 * created_at
 * updated_at
 
-Relaciones:
+## Relationships
 
-users.role_id → roles.id
+`users.role_id` → `roles.id`
 
 ---
 
-# Tabla: products
+# Table: products
 
-Propósito:
+## Purpose
 
-Productos agroindustriales que pueden ser producidos.
+Agro-industrial products that can be produced and recorded in the system.
 
-Ejemplos:
+## Examples
 
-* Helado de piña
-* Yogurt natural
-* Dulce de leche
+* Pineapple Ice Cream
+* Natural Yogurt
+* Dulce de Leche
 
-Campos esperados:
+## Expected Fields
 
 * id
 * name
@@ -85,19 +82,19 @@ Campos esperados:
 
 ---
 
-# Tabla: sections
+# Table: sections
 
-Propósito:
+## Purpose
 
-Secciones académicas.
+Academic sections or groups associated with production activities.
 
-Ejemplos:
+## Examples
 
 * 7-1
 * 7-2
-* Procesamiento
+* Processing
 
-Campos esperados:
+## Expected Fields
 
 * id
 * name
@@ -107,15 +104,15 @@ Campos esperados:
 
 ---
 
-# Tabla: productions
+# Table: productions
 
-Propósito:
+## Purpose
 
-Registro principal del sistema.
+Main production records of the system.
 
-Cada fila representa una producción realizada.
+Each row represents a completed production process.
 
-Campos identificados:
+## Identified Fields
 
 * id
 * production_date
@@ -133,63 +130,69 @@ Campos identificados:
 
 ---
 
-# Relaciones
+# Relationships
 
-product_id
-→ products.id
+## Product
 
-processed_by
-→ users.id
+`product_id` → `products.id`
 
-created_by
-→ users.id
+## Processed By
 
-section_id
-→ sections.id
+`processed_by` → `users.id`
+
+## Created By
+
+`created_by` → `users.id`
+
+## Section
+
+`section_id` → `sections.id`
 
 ---
 
 # Soft Delete
 
-La tabla productions utiliza:
+The `productions` table uses the field:
 
-deleted_at
+`deleted_at`
 
-Cuando:
+When:
 
+```sql
 deleted_at IS NULL
+```
 
-La producción se considera activa.
-
----
-
-# Reglas de Producción
-
-## Procesado Por
-
-Usuario que realizó la producción.
-
-Se almacena en:
-
-processed_by
+the production record is considered active.
 
 ---
 
-## Registrado Por
+# Production Rules
 
-Usuario que registró la producción.
+## Processed By
 
-Se almacena en:
+Represents the user who carried out the production process.
 
-created_by
+Stored in:
 
-Normalmente corresponde al usuario autenticado.
+`processed_by`
 
 ---
 
-## Unidad
+## Recorded By
 
-Opciones estándar:
+Represents the user who registered the production record.
+
+Stored in:
+
+`created_by`
+
+This typically corresponds to the authenticated user.
+
+---
+
+## Unit
+
+Standard options:
 
 * Units
 * Kilograms
@@ -197,58 +200,62 @@ Opciones estándar:
 * Liters
 * Milliliters
 
-Si se selecciona:
+If the selected option is:
 
-Other
+`Other`
 
-Debe utilizarse:
+then the field:
 
-custom_unit
+`custom_unit`
+
+must be used.
 
 ---
 
-# Consultas Frecuentes
+# Common Queries
 
-Producciones activas:
+## Active Productions
 
+```sql
 WHERE deleted_at IS NULL
+```
 
----
+## Productions by Section
 
-Producciones por sección:
-
+```sql
 WHERE section_id = ?
+```
 
----
+## Productions by Product
 
-Producciones por producto:
-
+```sql
 WHERE product_id = ?
+```
 
----
+## Productions by User
 
-Producciones por usuario:
-
+```sql
 WHERE created_by = ?
+```
 
 ---
 
-# Pendientes de Base de Datos
+# Pending Database Improvements
 
-Evaluar agregar a users:
+Consider adding the following fields to the `users` table:
 
 * theme
 * language
 
-Para soportar:
+To support:
 
-* Modo oscuro.
-* Cambio de idioma.
+* Dark mode
+* Language switching
 
 ---
 
-# Nota Importante
+# Important Note
 
-Si en el futuro se comparte un schema.sql actualizado, este documento debe actualizarse para reflejar exactamente la estructura real de la base de datos.
+If an updated `schema.sql` file is provided in the future, this document should be updated to accurately reflect the actual database structure.
 
-La versión actual representa las tablas y relaciones conocidas durante el desarrollo.
+The current version represents the tables, fields, and relationships known during the development phase of the project.
