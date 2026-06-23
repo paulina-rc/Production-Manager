@@ -2,13 +2,11 @@
 
 Production Manager is a web-based application designed to manage and monitor production processes. The project was developed to centralize information related to products and production records.
 
-The system aims to replace manual record-keeping processes with a digital platform that improves organization, accessibility, and data traceability. Through a role-based access system, authorized users can manage production records, monitor historical data, and generate reports to support decision-making.
+The system aims to replace manual record-keeping processes with a digital platform that improves organization, accessibility, and data traceability. 
 
 ## Project Overview
 
 The primary goal of Production Manager is to provide an integrated solution for managing agro-industrial production activities. The platform allows institutions to maintain accurate records of production operations while ensuring accountability through user identification and activity tracking.
-
-By centralizing production information, the system facilitates data management, reduces administrative workload, and improves access to historical records.
 
 ## Features
 
