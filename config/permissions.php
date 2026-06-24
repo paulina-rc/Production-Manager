@@ -56,3 +56,18 @@ function isProfessor()
 {
     return isset($_SESSION['role_id']) && $_SESSION['role_id'] == 2;
 }
+
+function isAdministracion()
+{
+    return isset($_SESSION['role_id']) && $_SESSION['role_id'] == 3;
+}
+
+function requireExportPermission()
+{
+    requireLogin();
+
+    if (!in_array($_SESSION['role_id'], [1, 3])) {
+        header('Location: ../dashboard/');
+        exit;
+    }
+}
