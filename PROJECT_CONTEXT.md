@@ -2,307 +2,312 @@
 
 # Production Manager
 
-Sistema de Gestión de Producción Agroindustrial desarrollado para una institución educativa técnica.
+Production Manager is an Agro-Industrial Production Management System developed for a technical educational institution.
 
 ---
 
-# Objetivo del Proyecto
+# Project Objective
 
-Permitir el registro, administración, consulta y generación de reportes de producciones agroindustriales realizadas por estudiantes y profesores.
+The purpose of the system is to allow the registration, management, tracking, and reporting of agro-industrial production activities carried out by students and teachers.
 
-El sistema debe facilitar el control de:
+The system is designed to facilitate the management of:
 
-* Productos elaborados.
-* Producciones realizadas.
-* Usuarios del sistema.
-* Secciones académicas.
-* Reportes históricos.
+* Produced products
+* Production records
+* System users
+* Academic sections
+* Historical reports
 
 ---
 
-# Tecnologías Utilizadas
+# Technology Stack
 
-Backend:
+## Backend
 
-* PHP puro
+* Pure PHP
 * PDO
 
-Base de datos:
+## Database
 
 * MySQL
 
-Servidor local:
+## Local Development Environment
 
 * XAMPP
 
-Frontend:
+## Frontend
 
 * HTML5
 * CSS3
-* JavaScript (mínimo)
+* JavaScript (minimal usage)
 
-No se utilizan frameworks PHP.
-
----
-
-# Filosofía de Desarrollo
-
-Antes de programar:
-
-1. Analizar la arquitectura actual.
-2. Revisar qué ya existe.
-3. Evitar duplicar funcionalidades.
-4. Trabajar por sprints pequeños.
-5. Priorizar consistencia.
-6. Mantener código simple y entendible.
-7. Explicar impacto de cada cambio.
+No PHP frameworks are used in this project.
 
 ---
 
-# Estructura General
+# Development Philosophy
 
+Before implementing any feature:
+
+1. Analyze the current architecture.
+2. Review existing functionality.
+3. Avoid duplicate implementations.
+4. Work in small and manageable sprints.
+5. Prioritize consistency.
+6. Keep the code simple and maintainable.
+7. Explain the impact of every change.
+
+---
+
+# Project Structure
+
+```text
 production-manager/
 
-assets/
-├── css/
-├── img/
-└── js/
-
-auth/
-
-config/
-├── auth.php
-└── database.php
-
-dashboard/
-
-database/
-
-includes/
-├── footer.php
-├── header.php
-├── navbar.php
-└── sidebar.php
-
-products/
-sections/
-users/
-productions/
-reports/
-
-index.php
+├── assets/
+│   ├── css/
+│   ├── img/
+│   └── js/
+│
+├── auth/
+│
+├── config/
+│   ├── auth.php
+│   └── database.php
+│
+├── dashboard/
+│
+├── database/
+│
+├── includes/
+│   ├── footer.php
+│   ├── header.php
+│   ├── navbar.php
+│   └── sidebar.php
+│
+├── products/
+├── sections/
+├── users/
+├── productions/
+├── reports/
+│
+└── index.php
+```
 
 ---
 
-# Estado Actual
+# Current Status
 
-## Sistema de autenticación
+## Authentication System
 
-Implementado:
+Implemented:
 
 * Login
 * Logout
-* Control de sesión
-* Protección de rutas
+* Session management
+* Route protection
 
 ---
 
 ## Dashboard
 
-Implementado.
+Implemented.
 
-Contiene:
+Includes:
 
-* Tarjetas de estadísticas.
-* Resumen general.
-* Accesos rápidos.
+* Statistics cards
+* General overview
+* Quick access shortcuts
 
-Actualmente se encuentra en proceso de rediseño visual.
-
----
-
-## Usuarios
-
-Implementado:
-
-* Listado
-* Creación
-* Edición
-* Perfil
-
-Perfil actual:
-
-* Información personal.
-* Cambio de contraseña (en desarrollo).
-* Preparado para idioma y tema.
+The dashboard is currently undergoing a visual redesign.
 
 ---
 
-## Productos
+## Users
 
-Implementado:
+Implemented:
 
-* CRUD funcional.
-* Estado activo/inactivo.
+* User listing
+* User creation
+* User editing
+* User profile
 
-No se eliminan físicamente cuando sea posible.
+Current profile features:
 
----
-
-## Secciones
-
-Implementado:
-
-* CRUD funcional.
-
-Regla de negocio:
-
-Una producción pertenece a una sola sección.
+* Personal information
+* Password change functionality (in development)
+* Prepared for language and theme preferences
 
 ---
 
-## Producciones
+## Products
 
-Módulo principal del sistema.
+Implemented:
 
-Implementado:
+* Fully functional CRUD operations
+* Active / inactive status management
 
-* Listado
-* Registro
-* Edición
-* Vista detallada
-
-Este módulo tiene prioridad sobre cualquier otro módulo.
-
-La mayor parte del esfuerzo visual debe enfocarse aquí.
+Products should not be physically deleted whenever possible.
 
 ---
 
-# Reglas de Negocio
+## Sections
 
-## Producción
+Implemented:
 
-Cada producción registra:
+* Fully functional CRUD operations
 
-* Fecha de producción.
-* Producto.
-* Materias primas.
-* Procesado por.
-* Registrado por.
-* Sección.
-* Cantidad.
-* Unidad.
-* Unidad personalizada.
-* Fecha de creación.
+Business rule:
+
+A production record belongs to a single academic section.
 
 ---
 
-## Usuarios
+## Productions
 
-Existen roles.
+This is the core module of the system.
 
-Actualmente:
+Implemented:
 
-1 = Administrador
-2 = Profesor
+* Production listing
+* Production registration
+* Production editing
+* Detailed production view
 
-Posibilidad de expansión futura.
+This module has priority over all other modules.
 
----
-
-## Permisos
-
-Administrador:
-
-* Acceso total.
-* Puede modificar cualquier producción.
-
-Profesor:
-
-* Solo debería acceder a:
-
-  * Dashboard
-  * Producciones
-  * Reportes
-  * Perfil
-
-No debería acceder a:
-
-* Usuarios
-* Productos
-* Secciones
-
-Solo puede editar producciones creadas por él.
+Most visual and usability improvements should focus on this area.
 
 ---
 
-# Diseño Visual
+# Business Rules
 
-Objetivo visual:
+## Production Record
 
-Panel administrativo moderno.
+Each production entry stores:
 
-Inspiración:
-
-Dashboard profesional con:
-
-* Sidebar fija.
-* Tarjetas modernas.
-* Formularios modernos.
-* Tablas modernas.
-* Iconos profesionales.
-* Diseño limpio.
-* Colores verde oscuro y blanco.
-
----
-
-# Decisiones Visuales Tomadas
-
-No utilizar:
-
-* Emojis.
-* Estilos antiguos.
-* Tablas sin formato.
-* Formularios básicos.
-
-Sí utilizar:
-
-* Font Awesome.
-* Cards.
-* Grid Layout.
-* Sidebar moderna.
-* Diseño consistente.
+* Production date
+* Product
+* Raw materials
+* Processed by
+* Recorded by
+* Section
+* Quantity
+* Unit
+* Custom unit
+* Creation date
 
 ---
 
-# Funcionalidades Futuras
+## Users
 
-Prioridad alta:
+The system currently supports role-based access.
 
-1. Sidebar por roles.
-2. Permisos completos.
-3. Rediseño total de módulos.
+Current roles:
 
-Prioridad media:
+* 1 = Administrator
+* 2 = Teacher
 
-4. Tema oscuro.
-5. Cambio de idioma.
-
-Prioridad futura:
-
-6. Exportar a Excel.
-7. Exportar a Word.
-8. Actividad reciente.
-9. Dashboard avanzado.
+The architecture should allow future role expansion.
 
 ---
 
-# Forma de Trabajo Esperada
+## Permissions
 
-Cuando se solicite una modificación:
+### Administrator
 
-* Analizar primero.
-* Explicar impacto.
-* Indicar archivos afectados.
-* Preferir archivos completos para reemplazar.
-* Mantener consistencia con el diseño general.
+* Full system access
+* Can modify any production record
+
+### Teacher
+
+Should only have access to:
+
+* Dashboard
+* Productions
+* Reports
+* Profile
+
+Should not have access to:
+
+* Users
+* Products
+* Sections
+
+Teachers may only edit production records created by themselves.
+
+---
+
+# Visual Design
+
+## Design Goal
+
+Create a modern administrative dashboard experience.
+
+## Inspiration
+
+A professional dashboard featuring:
+
+* Fixed sidebar
+* Modern cards
+* Modern forms
+* Modern tables
+* Professional icons
+* Clean layout
+* Dark green and white color palette
+
+---
+
+# Visual Design Decisions
+
+### Avoid
+
+* Emojis
+* Outdated design styles
+* Unformatted tables
+* Basic forms
+
+### Use
+
+* Font Awesome
+* Cards
+* Grid layouts
+* Modern sidebar navigation
+* Consistent design patterns
+
+---
+
+# Future Features
+
+## High Priority
+
+1. Role-based sidebar navigation
+2. Complete permission system
+3. Full visual redesign of all modules
+
+## Medium Priority
+
+4. Dark mode
+5. Language switching
+
+## Future Roadmap
+
+6. Export to Excel
+7. Export to Word
+8. Recent activity tracking
+9. Advanced dashboard analytics
+
+---
+
+# Expected Workflow
+
+When a modification is requested:
+
+* Analyze the requirement first.
+* Explain the expected impact.
+* Identify the affected files.
+* Prefer providing complete replacement files when possible.
+* Maintain consistency with the overall project design and architecture.
+
+```
+```
