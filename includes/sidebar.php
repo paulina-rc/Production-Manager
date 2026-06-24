@@ -32,11 +32,11 @@ foreach ($nameParts as $part) {
         <div>
 
             <h2>
-                Agroindustrias
+                Agroindustria
             </h2>
 
             <span>
-                Production Manager
+                Gestor de Producciones
             </span>
 
         </div>
@@ -100,6 +100,16 @@ foreach ($nameParts as $part) {
 </div>
 
 <div class="topbar">
+
+    <div class="topbar-left">
+
+        <button class="theme-toggle"
+                onclick="toggleTheme()"
+                title="Cambiar tema">
+            <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+
+    </div>
 
     <div class="topbar-user">
 

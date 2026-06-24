@@ -98,8 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <title>Editar Sección</title>
 
-    <link rel="stylesheet"
-          <?php require_once '../includes/header.php'; ?>>
+    <?php require_once '../includes/header.php'; ?>
 
 </head>
 <body>

@@ -59,8 +59,7 @@ if (!$production) {
 
     <title>Detalle de Producción</title>
 
-    <link rel="stylesheet"
-          <?php require_once '../includes/header.php'; ?>>
+    <?php require_once '../includes/header.php'; ?>
 
 </head>
 <body>

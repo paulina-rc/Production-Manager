@@ -24,8 +24,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <title>Productos</title>
 
-    <link rel="stylesheet"
-          <?php require_once '../includes/header.php'; ?>>
+    <?php require_once '../includes/header.php'; ?>
 
 </head>
 <body>
