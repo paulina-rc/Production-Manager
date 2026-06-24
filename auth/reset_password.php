@@ -2,7 +2,6 @@
 
 require_once dirname(__DIR__) . '/config/database.php';
 
-$message = '';
 $error = '';
 
 $token = $_GET['token'] ?? '';
@@ -12,24 +11,24 @@ if (empty($token)) {
 }
 
 $stmt = $pdo->prepare("
-    SELECT *
-    FROM users
-    WHERE reset_token = ?
+    SELECT
+        password_resets.id AS reset_id,
+        password_resets.user_id,
+        password_resets.expires_at
+    FROM password_resets
+    WHERE password_resets.token = ?
     LIMIT 1
 ");
 
 $stmt->execute([$token]);
 
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+$reset = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$user) {
+if (!$reset) {
     die('Token inválido.');
 }
 
-if (
-    empty($user['reset_token_expires']) ||
-    strtotime($user['reset_token_expires']) < time()
-) {
+if (strtotime($reset['expires_at']) < time()) {
     die('El enlace ha expirado.');
 }
 
@@ -57,23 +56,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             PASSWORD_DEFAULT
         );
 
-        $updateStmt = $pdo->prepare("
+        $pdo->prepare("
             UPDATE users
-            SET
-                password = ?,
-                reset_token = NULL,
-                reset_token_expires = NULL
+            SET password = ?
             WHERE id = ?
-        ");
-
-        $updateStmt->execute([
+        ")->execute([
             $hashedPassword,
-            $user['id']
+            $reset['user_id']
         ]);
 
-        header(
-            'Location: login.php?reset=success'
-        );
+        $pdo->prepare("
+            DELETE FROM password_resets
+            WHERE id = ?
+        ")->execute([$reset['reset_id']]);
+
+        header('Location: login.php?reset=success');
         exit;
     }
 }
@@ -88,10 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <title>Restablecer Contraseña</title>
 
-    <link
-        rel="stylesheet"
-        <?php require_once '../includes/header.php'; ?>
-    >
+    <?php require_once '../includes/header.php'; ?>
 
 </head>
 <body>
@@ -157,4 +151,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </body>
 </html>
-```

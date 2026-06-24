@@ -193,10 +193,6 @@ $today = date('d/m/Y');
 
 </div>
 
-<div style="background:red;color:white;padding:30px;">
-    PRUEBA ROJA
-</div>
-
 <?php require_once '../includes/footer.php'; ?>
 
 </body>

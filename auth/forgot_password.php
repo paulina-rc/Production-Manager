@@ -30,18 +30,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             strtotime('+1 hour')
         );
 
-        $updateStmt = $pdo->prepare("
-            UPDATE users
-            SET
-                reset_token = ?,
-                reset_token_expires = ?
-            WHERE id = ?
-        ");
+        $pdo->prepare("
+            DELETE FROM password_resets
+            WHERE user_id = ?
+        ")->execute([$user['id']]);
 
-        $updateStmt->execute([
+        $pdo->prepare("
+            INSERT INTO password_resets (
+                user_id,
+                token,
+                expires_at
+            )
+            VALUES (?, ?, ?)
+        ")->execute([
+            $user['id'],
             $token,
-            $expires,
-            $user['id']
+            $expires
         ]);
 
         try {
@@ -113,10 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <title>Recuperar Contraseña</title>
 
-    <link
-        rel="stylesheet"
-        <?php require_once '../includes/header.php'; ?>
-    >
+    <?php require_once '../includes/header.php'; ?>
 
 </head>
 <body>
@@ -180,4 +181,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </body>
 </html>
-

@@ -537,10 +537,10 @@ textarea {
 }
 
 .footer {
-    background: red !important;
-    color: white !important;
-    padding: 30px !important;
-    text-align: center !important;
+    background: #14532d;
+    color: white;
+    padding: 30px;
+    text-align: center;
 }   
 
 .footer p {
