@@ -55,7 +55,7 @@ require_once __DIR__ . '/../config/permissions.php';
             <span>Producciones</span>
         </a>
 
-        <a href="../reports/monthly.php">
+        <a href="../reports/index.php">
             <i class="fas fa-file-lines"></i>
             <span>Reportes</span>
         </a>

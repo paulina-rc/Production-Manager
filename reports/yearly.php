@@ -97,6 +97,10 @@ if ($export === 'excel' || $export === 'pdf') {
 
             <h2>Filtros</h2>
 
+            <a class="btn" href="index.php">
+                Volver a Reportes
+            </a>
+
         </div>
 
         <form method="GET">
