@@ -4,7 +4,7 @@ require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/config/permissions.php';
 
-$month = $_GET['month'] ?? date('m');
+$week = $_GET['week'] ?? date('W');
 $year = $_GET['year'] ?? date('Y');
 
 $stmt = $pdo->prepare("
@@ -19,14 +19,14 @@ $stmt = $pdo->prepare("
         ON productions.product_id = products.id
     INNER JOIN sections
         ON productions.section_id = sections.id
-    WHERE MONTH(productions.production_date) = ?
+    WHERE WEEK(productions.production_date, 1) = ?
     AND YEAR(productions.production_date) = ?
     AND productions.deleted_at IS NULL
     ORDER BY productions.production_date DESC
 ");
 
 $stmt->execute([
-    $month,
+    $week,
     $year
 ]);
 
@@ -53,9 +53,9 @@ if ($export === 'excel' || $export === 'pdf') {
     }, $productions);
 
     if ($export === 'excel') {
-        exportToExcel($data, $headers, 'reporte-mensual');
+        exportToExcel($data, $headers, 'reporte-semanal');
     } else {
-        exportToPdf($data, $headers, 'Reporte Mensual', 'reporte-mensual');
+        exportToPdf($data, $headers, 'Reporte Semanal', 'reporte-semanal');
     }
 }
 
@@ -67,7 +67,7 @@ if ($export === 'excel' || $export === 'pdf') {
 
     <meta charset="UTF-8">
 
-    <title>Reporte Mensual</title>
+    <title>Reporte Semanal</title>
 
     <?php require_once '../includes/header.php'; ?>
 
@@ -80,10 +80,10 @@ if ($export === 'excel' || $export === 'pdf') {
 
     <div class="welcome-box">
 
-        <h1>Reporte Mensual</h1>
+        <h1>Reporte Semanal</h1>
 
         <p>
-            Consulta de producciones registradas por mes.
+            Consulta de producciones registradas por semana.
         </p>
 
     </div>
@@ -102,25 +102,16 @@ if ($export === 'excel' || $export === 'pdf') {
 
                 <div>
 
-                    <label>Mes</label>
+                    <label>Semana</label>
 
-                    <select
-                        name="month"
+                    <input
+                        type="number"
+                        name="week"
+                        min="1"
+                        max="53"
+                        value="<?php echo htmlspecialchars($week); ?>"
                         class="form-control"
                     >
-
-                        <?php for ($i = 1; $i <= 12; $i++): ?>
-
-                            <option
-                                value="<?php echo sprintf('%02d', $i); ?>"
-                                <?php echo ($month == sprintf('%02d', $i)) ? 'selected' : ''; ?>
-                            >
-                                <?php echo $i; ?>
-                            </option>
-
-                        <?php endfor; ?>
-
-                    </select>
 
                 </div>
 
@@ -161,9 +152,7 @@ if ($export === 'excel' || $export === 'pdf') {
             <h3>Total Registros</h3>
 
             <div class="stat-number">
-
                 <?php echo count($productions); ?>
-
             </div>
 
         </div>
@@ -181,12 +170,12 @@ if ($export === 'excel' || $export === 'pdf') {
                 <div class="page-header-actions">
 
                     <a class="btn btn-sm"
-                       href="?month=<?php echo urlencode($month); ?>&year=<?php echo urlencode($year); ?>&export=excel">
+                       href="?week=<?php echo urlencode($week); ?>&year=<?php echo urlencode($year); ?>&export=excel">
                         <i class="fas fa-file-excel"></i> Excel
                     </a>
 
                     <a class="btn btn-sm"
-                       href="?month=<?php echo urlencode($month); ?>&year=<?php echo urlencode($year); ?>&export=pdf">
+                       href="?week=<?php echo urlencode($week); ?>&year=<?php echo urlencode($year); ?>&export=pdf">
                         <i class="fas fa-file-pdf"></i> PDF
                     </a>
 
@@ -199,7 +188,7 @@ if ($export === 'excel' || $export === 'pdf') {
         <?php if (empty($productions)): ?>
 
             <p>
-                No se encontraron registros para este período.
+                No se encontraron registros para esta semana.
             </p>
 
         <?php else: ?>

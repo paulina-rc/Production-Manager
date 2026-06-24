@@ -1,8 +1,8 @@
-
 <?php
 
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/permissions.php';
 
 $year = $_GET['year'] ?? date('Y');
 
@@ -33,6 +33,35 @@ $stmt->execute([$year]);
 
 $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$export = $_GET['export'] ?? '';
+
+if ($export === 'excel' || $export === 'pdf') {
+
+    requireExportPermission();
+
+    require_once dirname(__DIR__) . '/config/export.php';
+
+    $headers = ['Fecha', 'Producto', 'Procesado Por', 'Registrado Por', 'Sección', 'Cantidad', 'Unidad'];
+
+    $data = array_map(function ($p) {
+        return [
+            $p['production_date'],
+            $p['product_name'],
+            $p['processed_by_name'],
+            $p['created_by_name'],
+            $p['section_name'],
+            $p['quantity'],
+            $p['unit'],
+        ];
+    }, $productions);
+
+    if ($export === 'excel') {
+        exportToExcel($data, $headers, 'reporte-anual');
+    } else {
+        exportToPdf($data, $headers, 'Reporte Anual', 'reporte-anual');
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -43,8 +72,7 @@ $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <title>Reporte Anual</title>
 
-    <link rel="stylesheet"
-          <?php require_once '../includes/header.php'; ?>>
+    <?php require_once '../includes/header.php'; ?>
 
 </head>
 <body>
@@ -82,7 +110,7 @@ $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <input
                         type="number"
                         name="year"
-                        value="<?php echo $year; ?>"
+                        value="<?php echo htmlspecialchars($year); ?>"
                         class="form-control"
                     >
 
@@ -124,6 +152,24 @@ $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="table-header">
 
             <h2>Resultados</h2>
+
+            <?php if (isAdmin() || isAdministracion()): ?>
+
+                <div class="page-header-actions">
+
+                    <a class="btn btn-sm"
+                       href="?year=<?php echo urlencode($year); ?>&export=excel">
+                        <i class="fas fa-file-excel"></i> Excel
+                    </a>
+
+                    <a class="btn btn-sm"
+                       href="?year=<?php echo urlencode($year); ?>&export=pdf">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+
+                </div>
+
+            <?php endif; ?>
 
         </div>
 
@@ -187,4 +233,3 @@ $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </body>
 </html>
-
