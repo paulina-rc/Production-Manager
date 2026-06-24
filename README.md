@@ -1,47 +1,51 @@
 # Production Manager
 
-Production Manager is a web-based application designed to manage and monitor production processes. The project was developed to centralize information related to products and production records.
+Production Manager is a web-based application for managing and monitoring agro-industrial production processes at an educational institution. It replaces manual record-keeping with a digital platform that improves organization, accessibility, and data traceability.
 
-The system aims to replace manual record-keeping processes with a digital platform that improves organization, accessibility, and data traceability. 
-
-## Project Overview
-
-The primary goal of Production Manager is to provide an integrated solution for managing agro-industrial production activities. The platform allows institutions to maintain accurate records of production operations while ensuring accountability through user identification and activity tracking.
+The **Productions** module is the core of the system and takes priority over all others.
 
 ## Features
 
-The application currently includes user authentication and authorization, product management, section management, production tracking, and reporting capabilities.
+- **Authentication & roles**: login, password recovery via single-use tokens, and role-based access (Admin, Professor, Administration).
+- **Product & section management**: create, edit, and toggle active status.
+- **User management**: admin-controlled only (no public registration).
+- **Productions**: create, edit, view, and search records, with permission rules (professors can only edit their own records).
+- **Reports**: weekly, monthly, semester, and yearly, accessible from a central reports index.
+- **Excel/PDF export**: available only to Admin and Administration roles.
+- **Modern UI**: CSS variable-based design system, layered shadows, fixed top header, and a 7-day production trend chart.
+- **Light/dark mode**: persistent toggle via `localStorage`, applied across all views.
+- **Branding**: institutional logo in sidebar, favicon, and login screen.
+- **Spanish UI**: all interface text standardized to Spanish.
 
-Users can create and manage production records, associate products with specific sections, and maintain a complete history of production activities. The system also includes password recovery functionality and role-based permissions to ensure secure access to sensitive information.
+## Roles
 
-Reporting tools allow users to generate monthly, semester-based, and annual production reports, providing valuable insights into operational performance over time.
+| Role | role_id | Access |
+|---|---|---|
+| Admin | 1 | Full system access |
+| Professor | 2 | Dashboard, Productions (own records), Reports, Profile |
+| Administration | 3 | Dashboard, Reports (with Excel/PDF export), Profile |
 
-## Technology Stack
+## Tech Stack
 
-The backend of the application is developed using PHP and MySQL, following a structured architecture that emphasizes maintainability and scalability.
-
-The frontend is built with HTML, CSS, and JavaScript, providing a responsive and user-friendly interface.
-
-Development and deployment are supported by tools such as XAMPP, phpMyAdmin, Git, and GitHub.
+**Backend:** Plain PHP, PDO, MySQL
+**Frontend:** HTML, CSS (variable-based theming), JavaScript, Chart.js, Font Awesome
+**PHP libraries:** `phpmailer/phpmailer`, `phpoffice/phpspreadsheet`, `dompdf/dompdf`
+**Dev environment:** XAMPP, phpMyAdmin, Git, GitHub
 
 ## Project Structure
 
 ```text
 production-manager/
 │
-├── assets/
-│   ├── css/
-│   ├── img/
-│   └── js/
-│
-├── auth/
-├── config/
+├── assets/            # CSS (theme system), images, JS (theme.js)
+├── auth/              # Login, logout, password recovery
+├── config/            # DB connection, sessions, permissions, mail, export
 ├── dashboard/
-├── database/
-├── includes/
-├── productions/
+├── database/          # schema.sql, seed.sql
+├── includes/          # header, footer, sidebar
+├── productions/       # Core module
 ├── products/
-├── reports/
+├── reports/           # Weekly, monthly, semester, yearly + export
 ├── sections/
 ├── users/
 │
@@ -50,15 +54,13 @@ production-manager/
 
 ## Installation
 
-To run the project locally, clone the repository and place it inside the `htdocs` directory of your XAMPP installation.
-
-Create a MySQL database and import the `schema.sql` file included in the project. Once the database has been configured, start Apache and MySQL from the XAMPP Control Panel and access the application through your browser.
-
 ```bash
-git clone https://github.com/your-username/production-manager.git
+git clone https://github.com/paulina-rc/Production-Manager.git
+composer install
+cp .env.example .env
 ```
 
-The application will be available at:
+Create a MySQL database, import `database/schema.sql` and `database/seed.sql`, set your credentials in `.env`, then start Apache and MySQL via XAMPP and visit:
 
 ```text
 http://localhost/production-manager
@@ -66,10 +68,12 @@ http://localhost/production-manager
 
 ## Current Status
 
-Production Manager is currently under active development. Core modules such as user management, product management, section administration, production tracking, and reporting are already functional.
-
-Ongoing work focuses on interface improvements, dashboard enhancements, report exports, and additional administrative features aimed at improving usability and system efficiency.
+Core modules are fully functional: authentication, users, products, sections, productions, and reports, along with Excel/PDF export, role-based permissions, and a redesigned UI with light/dark mode support.
 
 ## Author
 
 **Paulina Rojas** — [@paulina-rc](https://github.com/paulina-rc)
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
