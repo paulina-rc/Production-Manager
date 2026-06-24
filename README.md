@@ -61,7 +61,7 @@ cp .env.example .env
 Create a MySQL database, import `database/schema.sql` and `database/seed.sql`, set your credentials in `.env`, then start Apache and MySQL via XAMPP and visit:
 
 ```text
-[http://localhost/production-manager](http://localhost/Production-Manager/auth/login.php)
+http://localhost/Production-Manager/auth/login.php
 ```
 
 ## Current Status
