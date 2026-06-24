@@ -88,7 +88,7 @@ if (
     <meta charset="UTF-8">
     <title>Mi Perfil</title>
 
-    <link rel="stylesheet" <?php require_once '../includes/header.php'; ?>>
+    <?php require_once '../includes/header.php'; ?>
 
 </head>
 <body>
@@ -104,7 +104,6 @@ if (
 
     <div class="profile-container">
 
-        <!-- INFORMACIÓN PERSONAL -->
         <div class="profile-card">
 
             <h2>Información Personal</h2>
@@ -138,10 +137,9 @@ if (
 
         </div>
 
-        <!-- CONFIGURACIÓN -->
         <div class="profile-card">
 
-            <h2>Configuración de Cuenta</h2>
+            <h2>Cambiar Contraseña</h2>
 
             <hr>
 
@@ -156,8 +154,6 @@ if (
                     <?php echo htmlspecialchars($error); ?>
                 </div>
             <?php endif; ?>
-
-            <h3>Cambiar Contraseña</h3>
 
             <form method="POST">
 
@@ -187,7 +183,7 @@ if (
                 >
 
                 <br><br>
-                
+
                 <button
                     type="submit"
                     name="change_password"
@@ -197,16 +193,6 @@ if (
                 </button>
 
             </form>
-
-            <hr>
-
-            <h3>Idioma</h3>
-            <p>Próximamente</p>
-
-            <hr>
-
-            <h3>Tema</h3>
-            <p>Próximamente</p>
 
         </div>
 

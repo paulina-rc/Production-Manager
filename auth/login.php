@@ -55,31 +55,24 @@ if (isset($_SESSION['user_id'])) {
 
     <title>Production Manager</title>
 
-        <?php require_once '../includes/header.php'; ?>
+    <?php require_once '../includes/header.php'; ?>
 
 </head>
-<body style="background:#f4f6f9;">
+<body>
 
-<div style="
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-">
+<div class="login-page">
 
-    <div class="form-card"
-         style="
-            width:450px;
-            max-width:95%;
-         ">
+    <div class="login-card">
 
-        <div style="text-align:center; margin-bottom:30px;">
+        <div class="login-header">
 
-            <h1 style="margin-bottom:10px;">
-                Production Manager
-            </h1>
+            <img src="../assets/img/logo.png"
+                 alt="Logo"
+                 class="login-logo">
 
-            <p style="color:#666;">
+            <h1>Production Manager</h1>
+
+            <p>
                 Sistema de Gestión de Producción Agroindustrial
             </p>
 
@@ -87,11 +80,10 @@ if (isset($_SESSION['user_id'])) {
 
         <?php if (!empty($error)): ?>
 
-            <div class="badge badge-danger">
+            <div class="badge badge-danger"
+                 style="display:block; text-align:center; margin-bottom:20px;">
                 <?php echo htmlspecialchars($error); ?>
             </div>
-
-            <br><br>
 
         <?php endif; ?>
 
@@ -114,7 +106,7 @@ if (isset($_SESSION['user_id'])) {
 
                 <label>Contraseña</label>
 
-                <div style="position:relative;">
+                <div class="password-wrapper">
 
                     <input
                         type="password"
@@ -126,19 +118,10 @@ if (isset($_SESSION['user_id'])) {
 
                     <button
                         type="button"
+                        class="password-toggle"
                         onclick="togglePassword()"
-                        style="
-                            position:absolute;
-                            right:10px;
-                            top:50%;
-                            transform:translateY(-50%);
-                            border:none;
-                            background:none;
-                            cursor:pointer;
-                            font-size:18px;
-                        "
                     >
-                        👁
+                        <i class="fas fa-eye" id="toggleIcon"></i>
                     </button>
 
                 </div>
@@ -148,17 +131,14 @@ if (isset($_SESSION['user_id'])) {
             <button
                 type="submit"
                 class="btn"
-                style="
-                    width:100%;
-                    margin-bottom:15px;
-                "
+                style="width:100%; margin-bottom:10px;"
             >
                 Iniciar Sesión
             </button>
 
         </form>
 
-        <div style="text-align:center;">
+        <div class="login-footer">
 
             <a href="forgot_password.php">
                 ¿Olvidaste tu contraseña?
@@ -174,20 +154,21 @@ if (isset($_SESSION['user_id'])) {
 
 function togglePassword() {
 
-    const input =
-        document.getElementById('password');
+    const input = document.getElementById('password');
+    const icon = document.getElementById('toggleIcon');
 
     if (input.type === 'password') {
         input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
     } else {
         input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
     }
 }
 
 </script>
 
-<?php require_once '../includes/footer.php'; ?>
-
 </body>
 </html>
-

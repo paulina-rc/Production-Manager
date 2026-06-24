@@ -1,5 +1,22 @@
 <?php
 require_once __DIR__ . '/../config/permissions.php';
+
+$roleLabels = [
+    1 => 'Administrador',
+    2 => 'Profesor',
+    3 => 'Administración'
+];
+
+$currentRoleLabel = $roleLabels[$_SESSION['role_id']] ?? 'Usuario';
+
+$nameParts = explode(' ', $_SESSION['user_name'] ?? '');
+$initials = '';
+foreach ($nameParts as $part) {
+    if (!empty($part)) {
+        $initials .= mb_strtoupper(mb_substr($part, 0, 1));
+        if (mb_strlen($initials) >= 2) break;
+    }
+}
 ?>
 
 <div class="sidebar">
@@ -7,7 +24,9 @@ require_once __DIR__ . '/../config/permissions.php';
     <div class="sidebar-logo">
 
         <div class="logo-icon">
-            <i class="fas fa-seedling"></i>
+            <img src="../assets/img/logo.png"
+                 alt="Logo"
+                 class="logo-img">
         </div>
 
         <div>
@@ -80,3 +99,26 @@ require_once __DIR__ . '/../config/permissions.php';
 
 </div>
 
+<div class="topbar">
+
+    <div class="topbar-user">
+
+        <div class="topbar-info">
+
+            <span class="topbar-name">
+                <?php echo htmlspecialchars($_SESSION['user_name']); ?>
+            </span>
+
+            <span class="topbar-role">
+                <?php echo htmlspecialchars($currentRoleLabel); ?>
+            </span>
+
+        </div>
+
+        <div class="topbar-avatar">
+            <?php echo htmlspecialchars($initials); ?>
+        </div>
+
+    </div>
+
+</div>

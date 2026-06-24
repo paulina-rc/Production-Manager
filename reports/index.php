@@ -32,75 +32,71 @@ require_once dirname(__DIR__) . '/config/permissions.php';
 
     </div>
 
-    <div class="card-container">
+    <div class="report-grid">
 
-        <div class="card">
+        <a href="weekly.php" class="report-card">
 
-            <h3>
+            <div class="report-card-icon">
                 <i class="fas fa-calendar-week"></i>
-                Reporte Semanal
-            </h3>
+            </div>
+
+            <h3>Reporte Semanal</h3>
 
             <p>
                 Producciones registradas por semana.
             </p>
 
-            <a class="btn" href="weekly.php">
-                Ver Reporte
-            </a>
+            <span class="btn">Ver Reporte</span>
 
-        </div>
+        </a>
 
-        <div class="card">
+        <a href="monthly.php" class="report-card">
 
-            <h3>
+            <div class="report-card-icon">
                 <i class="fas fa-calendar-days"></i>
-                Reporte Mensual
-            </h3>
+            </div>
+
+            <h3>Reporte Mensual</h3>
 
             <p>
                 Producciones registradas por mes.
             </p>
 
-            <a class="btn" href="monthly.php">
-                Ver Reporte
-            </a>
+            <span class="btn">Ver Reporte</span>
 
-        </div>
+        </a>
 
-        <div class="card">
+        <a href="semester.php" class="report-card">
 
-            <h3>
+            <div class="report-card-icon">
                 <i class="fas fa-calendar"></i>
-                Reporte Semestral
-            </h3>
+            </div>
+
+            <h3>Reporte Semestral</h3>
 
             <p>
                 Producciones registradas por semestre.
             </p>
 
-            <a class="btn" href="semester.php">
-                Ver Reporte
-            </a>
+            <span class="btn">Ver Reporte</span>
 
-        </div>
+        </a>
 
-        <div class="card">
+        <a href="yearly.php" class="report-card">
 
-            <h3>
+            <div class="report-card-icon">
                 <i class="fas fa-calendar-check"></i>
-                Reporte Anual
-            </h3>
+            </div>
+
+            <h3>Reporte Anual</h3>
 
             <p>
                 Producciones registradas por año.
             </p>
 
-            <a class="btn" href="yearly.php">
-                Ver Reporte
-            </a>
+            <span class="btn">Ver Reporte</span>
 
-        </div>
+        </a>
 
     </div>
 
