@@ -8,14 +8,12 @@ The **Productions** module is the core of the system and takes priority over all
 
 - **Authentication & roles**: login, password recovery via single-use tokens, and role-based access (Admin, Professor, Administration).
 - **Product & section management**: create, edit, and toggle active status.
-- **User management**: admin-controlled only (no public registration).
 - **Productions**: create, edit, view, and search records, with permission rules (professors can only edit their own records).
 - **Reports**: weekly, monthly, semester, and yearly, accessible from a central reports index.
 - **Excel/PDF export**: available only to Admin and Administration roles.
 - **Modern UI**: CSS variable-based design system, layered shadows, fixed top header, and a 7-day production trend chart.
 - **Light/dark mode**: persistent toggle via `localStorage`, applied across all views.
-- **Branding**: institutional logo in sidebar, favicon, and login screen.
-- **Spanish UI**: all interface text standardized to Spanish.
+
 
 ## Roles
 
