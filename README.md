@@ -12,16 +12,6 @@ The **Productions** module is the core of the system and takes priority over all
 - **Reports**: weekly, monthly, semester, and yearly, accessible from a central reports index.
 - **Excel/PDF export**: available only to Admin and Administration roles.
 - **Modern UI**: CSS variable-based design system, layered shadows, fixed top header, and a 7-day production trend chart.
-- **Light/dark mode**: persistent toggle via `localStorage`, applied across all views.
-
-
-## Roles
-
-| Role | role_id | Access |
-|---|---|---|
-| Admin | 1 | Full system access |
-| Professor | 2 | Dashboard, Productions (own records), Reports, Profile |
-| Administration | 3 | Dashboard, Reports (with Excel/PDF export), Profile |
 
 ## Tech Stack
 
