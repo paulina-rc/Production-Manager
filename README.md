@@ -53,10 +53,6 @@ Create a MySQL database, import `database/schema.sql` and `database/seed.sql`, s
 http://localhost/Production-Manager/auth/login.php
 ```
 
-## Current Status
-
-Core modules are fully functional: authentication, users, products, sections, productions, and reports, along with Excel/PDF export, role-based permissions, and a redesigned UI with light/dark mode support.
-
 ## Author
 
 **Paulina Rojas** — [@paulina-rc](https://github.com/paulina-rc)
