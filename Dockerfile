@@ -17,6 +17,15 @@ RUN a2enmod rewrite
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Configuración de PHP para producción: activa el buffer de salida
+# (evita errores de "headers already sent") y oculta warnings al
+# usuario final, aunque siguen quedando registrados en los logs.
+RUN { \
+        echo 'output_buffering = On'; \
+        echo 'display_errors = Off'; \
+        echo 'log_errors = On'; \
+    } > /usr/local/etc/php/conf.d/render-overrides.ini
+
 # Establecer el directorio raíz del proyecto dentro del contenedor
 WORKDIR /var/www/html
 
