@@ -18,7 +18,6 @@ The **Productions** module is the core of the system and takes priority over all
 **Backend:** Plain PHP, PDO, MySQL
 **Frontend:** HTML, CSS (variable-based theming), JavaScript, Chart.js, Font Awesome
 **PHP libraries:** `phpmailer/phpmailer`, `phpoffice/phpspreadsheet`, `dompdf/dompdf`
-**Dev environment:** XAMPP, phpMyAdmin, Git, GitHub
 
 ## Project Structure
 
