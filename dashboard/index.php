@@ -7,16 +7,19 @@ require_once dirname(__DIR__) . '/config/permissions.php';
 $totalProducts = $pdo->query("
     SELECT COUNT(*)
     FROM products
+    WHERE active = 1
 ")->fetchColumn();
 
 $totalUsers = $pdo->query("
     SELECT COUNT(*)
     FROM users
+    WHERE status = 1
 ")->fetchColumn();
 
 $totalSections = $pdo->query("
     SELECT COUNT(*)
     FROM sections
+    WHERE active = 1
 ")->fetchColumn();
 
 $totalProductions = $pdo->query("
@@ -44,24 +47,29 @@ $stmt = $pdo->query("
 
 $recentProductions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$chartStmt = $pdo->query("
-    SELECT
-        DATE(production_date) AS day,
-        COUNT(*) AS total
-    FROM productions
-    WHERE production_date >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
-    AND deleted_at IS NULL
-    GROUP BY DATE(production_date)
-    ORDER BY day ASC
-");
-
-$chartData = $chartStmt->fetchAll(PDO::FETCH_ASSOC);
-
 $days = [];
 for ($i = 6; $i >= 0; $i--) {
     $date = date('Y-m-d', strtotime("-{$i} days"));
     $days[$date] = 0;
 }
+
+$rangeStart = array_key_first($days);
+$rangeEnd = array_key_last($days);
+
+$chartStmt = $pdo->prepare("
+    SELECT
+        DATE(production_date) AS day,
+        COUNT(*) AS total
+    FROM productions
+    WHERE production_date >= ?
+    AND production_date < DATE_ADD(?, INTERVAL 1 DAY)
+    AND deleted_at IS NULL
+    GROUP BY DATE(production_date)
+    ORDER BY day ASC
+");
+$chartStmt->execute([$rangeStart, $rangeEnd]);
+
+$chartData = $chartStmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($chartData as $row) {
     if (isset($days[$row['day']])) {
         $days[$row['day']] = (int) $row['total'];
