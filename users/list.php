@@ -21,6 +21,14 @@ $stmt = $pdo->query("
 
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$error = '';
+
+if (($_GET['error'] ?? '') === 'self') {
+    $error = 'No podés restablecer tu propia contraseña desde aquí.';
+} elseif (($_GET['error'] ?? '') === 'notfound') {
+    $error = 'Usuario no encontrado.';
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -63,6 +71,16 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
     </div>
+
+    <?php if (!empty($error)): ?>
+
+        <div class="badge badge-danger">
+            <?php echo htmlspecialchars($error); ?>
+        </div>
+
+        <br><br>
+
+    <?php endif; ?>
 
     <div class="table-card">
 
@@ -123,6 +141,22 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <a href="edit.php?id=<?php echo $user['id']; ?>">
                             Editar
                         </a>
+
+                        <?php if ((int) $user['id'] !== (int) $_SESSION['user_id']): ?>
+
+                            <form method="POST"
+                                  action="reset_password.php"
+                                  onsubmit="return confirm('¿Restablecer la contraseña de este usuario? Se generará una contraseña temporal.');">
+
+                                <input type="hidden" name="id" value="<?php echo (int) $user['id']; ?>">
+
+                                <button type="submit">
+                                    Restablecer contraseña
+                                </button>
+
+                            </form>
+
+                        <?php endif; ?>
 
                     </td>
 
