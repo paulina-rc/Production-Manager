@@ -158,7 +158,7 @@ if (!$production) {
             <?php
 
             if (
-                $production['unit'] === 'Other' &&
+                $production['unit'] === 'Otro' &&
                 !empty($production['custom_unit'])
             ) {
 

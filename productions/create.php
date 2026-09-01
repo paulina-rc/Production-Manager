@@ -239,12 +239,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Seleccione una unidad
                 </option>
 
-                <option value="Units">Unidades</option>
-                <option value="Kilograms">Kilogramos</option>
-                <option value="Grams">Gramos</option>
-                <option value="Liters">Litros</option>
-                <option value="Milliliters">Mililitros</option>
-                <option value="Other">Otro</option>
+                <option value="Unidades">Unidades</option>
+                <option value="Kilogramos">Kilogramos</option>
+                <option value="Gramos">Gramos</option>
+                <option value="Litros">Litros</option>
+                <option value="Mililitros">Mililitros</option>
+                <option value="Otro">Otro</option>
 
             </select>
 
