@@ -4,6 +4,8 @@ require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/config/permissions.php';
 
+requireAdministracion();
+
 $year = $_GET['year'] ?? date('Y');
 
 $stmt = $pdo->prepare("
@@ -157,7 +159,7 @@ if ($export === 'excel' || $export === 'pdf') {
 
             <h2>Resultados</h2>
 
-            <?php if (isAdmin() || isAdministracion()): ?>
+            <?php if (isAdministracion()): ?>
 
                 <div class="page-header-actions">
 

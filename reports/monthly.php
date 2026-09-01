@@ -4,6 +4,8 @@ require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/config/permissions.php';
 
+requireAdministracion();
+
 $month = $_GET['month'] ?? date('m');
 $year = $_GET['year'] ?? date('Y');
 
@@ -180,7 +182,7 @@ if ($export === 'excel' || $export === 'pdf') {
 
             <h2>Resultados</h2>
 
-            <?php if (isAdmin() || isAdministracion()): ?>
+            <?php if (isAdministracion()): ?>
 
                 <div class="page-header-actions">
 

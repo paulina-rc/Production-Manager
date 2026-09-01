@@ -74,10 +74,14 @@ foreach ($nameParts as $part) {
             <span>Producciones</span>
         </a>
 
-        <a href="../reports/index.php">
-            <i class="fas fa-file-lines"></i>
-            <span>Reportes</span>
-        </a>
+        <?php if (isAdministracion()): ?>
+
+            <a href="../reports/index.php">
+                <i class="fas fa-file-lines"></i>
+                <span>Reportes</span>
+            </a>
+
+        <?php endif; ?>
 
     </div>
 
