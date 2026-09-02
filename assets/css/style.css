@@ -649,6 +649,12 @@ body {
     border-bottom: none;
 }
 
+.table th.text-right,
+.table td.text-right {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
 .action-links a {
     color: var(--primary-700);
     text-decoration: none;

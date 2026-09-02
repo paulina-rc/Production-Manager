@@ -35,6 +35,48 @@ $stmt->execute([$year]);
 
 $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$productTotalsStmt = $pdo->prepare("
+    SELECT
+        products.name AS product_name,
+        CASE
+            WHEN productions.unit = 'Otro' THEN productions.custom_unit
+            ELSE productions.unit
+        END AS unit_label,
+        SUM(productions.quantity) AS total_quantity
+    FROM productions
+    INNER JOIN products
+        ON productions.product_id = products.id
+    WHERE YEAR(productions.production_date) = ?
+    AND productions.deleted_at IS NULL
+    GROUP BY products.id, products.name, productions.unit, productions.custom_unit
+    ORDER BY total_quantity DESC
+");
+
+$productTotalsStmt->execute([$year]);
+
+$productTotals = $productTotalsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+$sectionTotalsStmt = $pdo->prepare("
+    SELECT
+        sections.name AS section_name,
+        CASE
+            WHEN productions.unit = 'Otro' THEN productions.custom_unit
+            ELSE productions.unit
+        END AS unit_label,
+        SUM(productions.quantity) AS total_quantity
+    FROM productions
+    INNER JOIN sections
+        ON productions.section_id = sections.id
+    WHERE YEAR(productions.production_date) = ?
+    AND productions.deleted_at IS NULL
+    GROUP BY sections.id, sections.name, productions.unit, productions.custom_unit
+    ORDER BY total_quantity DESC
+");
+
+$sectionTotalsStmt->execute([$year]);
+
+$sectionTotals = $sectionTotalsStmt->fetchAll(PDO::FETCH_ASSOC);
+
 $export = $_GET['export'] ?? '';
 
 if ($export === 'excel' || $export === 'pdf') {
@@ -43,24 +85,42 @@ if ($export === 'excel' || $export === 'pdf') {
 
     require_once dirname(__DIR__) . '/config/export.php';
 
-    $headers = ['Fecha', 'Producto', 'Procesado Por', 'Registrado Por', 'Sección', 'Cantidad', 'Unidad'];
-
-    $data = array_map(function ($p) {
-        return [
-            $p['production_date'],
-            $p['product_name'],
-            $p['processed_by_name'],
-            $p['created_by_name'],
-            $p['section_name'],
-            $p['quantity'],
-            $p['unit'],
-        ];
-    }, $productions);
+    $sections = [
+        [
+            'title' => 'Detalle',
+            'headers' => ['Fecha', 'Producto', 'Procesado Por', 'Registrado Por', 'Sección', 'Cantidad', 'Unidad'],
+            'rows' => array_map(function ($p) {
+                return [
+                    $p['production_date'],
+                    $p['product_name'],
+                    $p['processed_by_name'],
+                    $p['created_by_name'],
+                    $p['section_name'],
+                    $p['quantity'],
+                    $p['unit'],
+                ];
+            }, $productions),
+        ],
+        [
+            'title' => 'Producción Total por Producto',
+            'headers' => ['Producto', 'Cantidad', 'Unidad'],
+            'rows' => array_map(function ($t) {
+                return [$t['product_name'], $t['total_quantity'], $t['unit_label']];
+            }, $productTotals),
+        ],
+        [
+            'title' => 'Producción Total por Sección',
+            'headers' => ['Sección', 'Cantidad', 'Unidad'],
+            'rows' => array_map(function ($t) {
+                return [$t['section_name'], $t['total_quantity'], $t['unit_label']];
+            }, $sectionTotals),
+        ],
+    ];
 
     if ($export === 'excel') {
-        exportToExcel($data, $headers, 'reporte-anual');
+        exportToExcel($sections, 'reporte-anual');
     } else {
-        exportToPdf($data, $headers, 'Reporte Anual', 'reporte-anual');
+        exportToPdf($sections, 'Reporte Anual', 'reporte-anual');
     }
 }
 
@@ -150,6 +210,102 @@ if ($export === 'excel' || $export === 'pdf') {
             </div>
 
         </div>
+
+    </div>
+
+    <div class="table-card">
+
+        <div class="table-header">
+            <h2>Producción Total por Producto</h2>
+        </div>
+
+        <?php if (empty($productions)): ?>
+
+            <p>No se encontraron registros.</p>
+
+        <?php else: ?>
+
+            <table class="table">
+
+                <thead>
+
+                    <tr>
+                        <th>Producto</th>
+                        <th class="text-right">Cantidad</th>
+                        <th>Unidad</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                <?php foreach ($productTotals as $total): ?>
+
+                    <tr>
+
+                        <td><?php echo htmlspecialchars($total['product_name']); ?></td>
+
+                        <td class="text-right"><?php echo htmlspecialchars($total['total_quantity']); ?></td>
+
+                        <td><?php echo htmlspecialchars($total['unit_label']); ?></td>
+
+                    </tr>
+
+                <?php endforeach; ?>
+
+                </tbody>
+
+            </table>
+
+        <?php endif; ?>
+
+    </div>
+
+    <div class="table-card">
+
+        <div class="table-header">
+            <h2>Producción Total por Sección</h2>
+        </div>
+
+        <?php if (empty($productions)): ?>
+
+            <p>No se encontraron registros.</p>
+
+        <?php else: ?>
+
+            <table class="table">
+
+                <thead>
+
+                    <tr>
+                        <th>Sección</th>
+                        <th class="text-right">Cantidad</th>
+                        <th>Unidad</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                <?php foreach ($sectionTotals as $total): ?>
+
+                    <tr>
+
+                        <td><?php echo htmlspecialchars($total['section_name']); ?></td>
+
+                        <td class="text-right"><?php echo htmlspecialchars($total['total_quantity']); ?></td>
+
+                        <td><?php echo htmlspecialchars($total['unit_label']); ?></td>
+
+                    </tr>
+
+                <?php endforeach; ?>
+
+                </tbody>
+
+            </table>
+
+        <?php endif; ?>
 
     </div>
 
