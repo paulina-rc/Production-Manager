@@ -29,10 +29,12 @@ $stmt = $pdo->prepare("
     SELECT *
     FROM products
     ORDER BY name ASC
-    LIMIT ? OFFSET ?
+    LIMIT :limit OFFSET :offset
 ");
 
-$stmt->execute([$perPage, $offset]);
+$stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
 
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -125,15 +127,15 @@ function buildPageUrl($page)
 
                 <tr>
 
-                    <td>
+                    <td data-label="ID">
                         <?php echo $product['id']; ?>
                     </td>
 
-                    <td>
+                    <td data-label="Producto">
                         <?php echo htmlspecialchars($product['name']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Estado">
 
                         <?php if ($product['active']): ?>
 
@@ -151,7 +153,7 @@ function buildPageUrl($page)
 
                     </td>
 
-                    <td class="action-links">
+                    <td class="action-links" data-label="Acciones">
 
                         <a href="edit.php?id=<?php echo $product['id']; ?>">
                             Editar

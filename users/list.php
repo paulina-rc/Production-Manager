@@ -42,10 +42,12 @@ $stmt = $pdo->prepare("
     INNER JOIN roles
         ON users.role_id = roles.id
     ORDER BY users.full_name ASC
-    LIMIT ? OFFSET ?
+    LIMIT :limit OFFSET :offset
 ");
 
-$stmt->execute([$perPage, $offset]);
+$stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
 
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -158,27 +160,27 @@ if (($_GET['error'] ?? '') === 'self') {
 
                 <tr>
 
-                    <td>
+                    <td data-label="ID">
                         <?php echo $user['id']; ?>
                     </td>
 
-                    <td>
+                    <td data-label="Nombre Completo">
                         <?php echo htmlspecialchars($user['full_name']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Correo">
                         <?php echo htmlspecialchars($user['email']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Rol">
                         <?php echo htmlspecialchars($user['role_name']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Estado">
                         <?php echo $user['status'] ? 'Activo' : 'Inactivo'; ?>
                     </td>
 
-                    <td class="action-links">
+                    <td class="action-links" data-label="Acciones">
 
                         <a href="edit.php?id=<?php echo $user['id']; ?>">
                             Editar

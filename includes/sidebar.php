@@ -19,7 +19,7 @@ foreach ($nameParts as $part) {
 }
 ?>
 
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
 
     <div class="sidebar-logo">
 
@@ -29,7 +29,7 @@ foreach ($nameParts as $part) {
                  class="logo-img">
         </div>
 
-        <div>
+        <div class="sidebar-logo-text">
 
             <h2>
                 Agroindustria
@@ -106,6 +106,15 @@ foreach ($nameParts as $part) {
 <div class="topbar">
 
     <div class="topbar-left">
+
+        <button class="sidebar-toggle"
+                id="sidebarToggle"
+                type="button"
+                aria-label="Abrir menú"
+                aria-expanded="false"
+                aria-controls="sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
 
         <button class="theme-toggle"
                 onclick="toggleTheme()"

@@ -30,31 +30,30 @@ $joinsSql = "
     WHERE productions.deleted_at IS NULL
 ";
 
-$params = [];
-
 if (!empty($search)) {
 
     $joinsSql .= "
         AND (
-            products.name LIKE ?
-            OR processor.full_name LIKE ?
-            OR creator.full_name LIKE ?
-            OR sections.name LIKE ?
+            products.name LIKE :search1
+            OR processor.full_name LIKE :search2
+            OR creator.full_name LIKE :search3
+            OR sections.name LIKE :search4
         )
     ";
 
     $searchTerm = '%' . $search . '%';
-
-    $params = [
-        $searchTerm,
-        $searchTerm,
-        $searchTerm,
-        $searchTerm
-    ];
 }
 
 $countStmt = $pdo->prepare("SELECT COUNT(*) {$joinsSql}");
-$countStmt->execute($params);
+
+if (!empty($search)) {
+    $countStmt->bindValue(':search1', $searchTerm, PDO::PARAM_STR);
+    $countStmt->bindValue(':search2', $searchTerm, PDO::PARAM_STR);
+    $countStmt->bindValue(':search3', $searchTerm, PDO::PARAM_STR);
+    $countStmt->bindValue(':search4', $searchTerm, PDO::PARAM_STR);
+}
+
+$countStmt->execute();
 
 $totalProductions = (int) $countStmt->fetchColumn();
 
@@ -84,15 +83,21 @@ $sql = "
 
     {$joinsSql}
     ORDER BY productions.production_date DESC
-    LIMIT ? OFFSET ?
+    LIMIT :limit OFFSET :offset
 ";
 
-$listParams = $params;
-$listParams[] = $perPage;
-$listParams[] = $offset;
-
 $stmt = $pdo->prepare($sql);
-$stmt->execute($listParams);
+
+if (!empty($search)) {
+    $stmt->bindValue(':search1', $searchTerm, PDO::PARAM_STR);
+    $stmt->bindValue(':search2', $searchTerm, PDO::PARAM_STR);
+    $stmt->bindValue(':search3', $searchTerm, PDO::PARAM_STR);
+    $stmt->bindValue(':search4', $searchTerm, PDO::PARAM_STR);
+}
+
+$stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
 
 $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -157,30 +162,22 @@ function buildPageUrl($page)
 
         </div>
 
-        <form method="GET" style="margin-bottom:20px;">
+        <form method="GET">
 
-            <form method="GET" style="margin-bottom:20px;">
+            <input
+                type="text"
+                name="search"
+                placeholder="Buscar producto, usuario o sección..."
+                value="<?php echo htmlspecialchars($search); ?>"
+                class="form-control"
+            >
 
-        
-        <input
-            type="text"
-            name="search"
-            placeholder="Buscar producto, usuario o sección..."
-            value="<?php echo htmlspecialchars($search); ?>"
-            style="width:100%; padding:10px; border-radius:8px;"
-        >
-
-        <button
-            type="submit"
-            class="btn"
-            style="margin-top:10px;"
-        >
-            Buscar
-        </button>
-        
-
-</form>
-
+            <button
+                type="submit"
+                class="btn"
+            >
+                Buscar
+            </button>
 
         </form>
 
@@ -213,35 +210,35 @@ function buildPageUrl($page)
 
                 <tr>
 
-                    <td>
+                    <td data-label="Fecha">
                         <?php echo htmlspecialchars($production['production_date']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Producto">
                         <?php echo htmlspecialchars($production['product_name']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Procesado Por">
                         <?php echo htmlspecialchars($production['processed_by_name']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Registrado Por">
                         <?php echo htmlspecialchars($production['created_by_name']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Sección">
                         <?php echo htmlspecialchars($production['section_name']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Cantidad">
                         <?php echo htmlspecialchars($production['quantity']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Unidad">
                         <?php echo htmlspecialchars($production['unit']); ?>
                     </td>
 
-                    <td class="action-links">
+                    <td class="action-links" data-label="Acciones">
 
                         <a href="view.php?id=<?php echo $production['id']; ?>">
                             Ver
