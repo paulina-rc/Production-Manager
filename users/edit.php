@@ -5,6 +5,7 @@ requireAdmin();
 
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/csrf.php';
 
 if (!isset($_GET['id'])) {
     header('Location: list.php');
@@ -41,6 +42,8 @@ $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    csrfCheck();
 
     $fullName = trim($_POST['full_name']);
     $email = trim($_POST['email']);
@@ -158,6 +161,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form method="POST">
+
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken()); ?>">
 
             <div class="form-group">
 

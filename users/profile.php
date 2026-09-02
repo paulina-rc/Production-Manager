@@ -2,6 +2,7 @@
 
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/csrf.php';
 
 $stmt = $pdo->prepare("
     SELECT
@@ -32,6 +33,8 @@ if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
     && isset($_POST['change_password'])
 ) {
+
+    csrfCheck();
 
     $currentPassword = $_POST['current_password'] ?? '';
     $newPassword = $_POST['new_password'] ?? '';
@@ -156,6 +159,8 @@ if (
             <?php endif; ?>
 
             <form method="POST">
+
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken()); ?>">
 
                 <label>Contraseña Actual</label>
 

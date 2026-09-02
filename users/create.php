@@ -5,6 +5,7 @@ requireAdmin();
 
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/csrf.php';
 
 $error = '';
 
@@ -17,6 +18,8 @@ $stmt = $pdo->query("
 $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    csrfCheck();
 
     $fullName = trim($_POST['full_name']);
     $email = trim($_POST['email']);
@@ -120,6 +123,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form method="POST">
+
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken()); ?>">
 
             <div class="form-group">
 

@@ -2,6 +2,7 @@
 
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/csrf.php';
 
 if (!isset($_GET['id'])) {
     header('Location: list.php');
@@ -56,6 +57,8 @@ $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    csrfCheck();
 
     $productionDate = $_POST['production_date'];
     $productId = (int) $_POST['product_id'];
@@ -163,6 +166,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form method="POST">
+
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken()); ?>">
 
             <div class="form-grid">
 

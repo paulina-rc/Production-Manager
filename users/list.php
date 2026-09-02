@@ -5,6 +5,7 @@ requireAdmin();
 
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/csrf.php';
 
 $stmt = $pdo->query("
     SELECT
@@ -149,6 +150,8 @@ if (($_GET['error'] ?? '') === 'self') {
                                   onsubmit="return confirm('¿Restablecer la contraseña de este usuario? Se generará una contraseña temporal.');">
 
                                 <input type="hidden" name="id" value="<?php echo (int) $user['id']; ?>">
+
+                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken()); ?>">
 
                                 <button type="submit">
                                     Restablecer contraseña

@@ -3,6 +3,7 @@
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/config/permissions.php';
+require_once dirname(__DIR__) . '/config/csrf.php';
 
 requireAdmin();
 
@@ -10,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: list.php');
     exit;
 }
+
+csrfCheck();
 
 $userId = (int) ($_POST['id'] ?? 0);
 
