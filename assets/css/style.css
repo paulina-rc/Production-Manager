@@ -251,7 +251,8 @@ body {
 }
 
 .sidebar-logo {
-    padding: 20px 2px;
+    height: var(--topbar-height);
+    padding: 0 2px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -262,8 +263,19 @@ body {
 .sidebar:hover .sidebar-logo,
 .sidebar:focus-within .sidebar-logo,
 .sidebar.sidebar--open .sidebar-logo {
+    height: auto;
     padding: 28px 22px;
     justify-content: flex-start;
+}
+
+.sidebar-logo-text {
+    display: none;
+}
+
+.sidebar:hover .sidebar-logo-text,
+.sidebar:focus-within .sidebar-logo-text,
+.sidebar.sidebar--open .sidebar-logo-text {
+    display: block;
 }
 
 .sidebar-logo h2 {
@@ -316,9 +328,11 @@ body {
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin: 4px 12px;
-    padding: 12px 16px;
+    justify-content: center;
+    height: 44px;
+    margin: 0 12px;
+    padding: 0;
+    gap: 0;
     border-radius: var(--radius-sm);
     font-size: 14px;
     font-weight: 500;
@@ -326,27 +340,39 @@ body {
     transition: all 0.25s var(--ease-out);
 }
 
-.sidebar-logo-text,
+.sidebar:hover .sidebar-menu a,
+.sidebar:hover .sidebar-footer a,
+.sidebar:focus-within .sidebar-menu a,
+.sidebar:focus-within .sidebar-footer a,
+.sidebar.sidebar--open .sidebar-menu a,
+.sidebar.sidebar--open .sidebar-footer a {
+    justify-content: flex-start;
+    padding: 0 6px;
+    gap: 14px;
+}
+
 .sidebar-menu a span,
 .sidebar-footer a span {
     opacity: 0;
+    width: 0;
+    overflow: hidden;
     white-space: nowrap;
 }
 
-.sidebar:hover .sidebar-logo-text,
 .sidebar:hover .sidebar-menu a span,
 .sidebar:hover .sidebar-footer a span,
-.sidebar:focus-within .sidebar-logo-text,
 .sidebar:focus-within .sidebar-menu a span,
 .sidebar:focus-within .sidebar-footer a span,
-.sidebar.sidebar--open .sidebar-logo-text,
 .sidebar.sidebar--open .sidebar-menu a span,
 .sidebar.sidebar--open .sidebar-footer a span {
     opacity: 1;
+    width: auto;
 }
 
 .sidebar-menu a i,
 .sidebar-footer a i {
+    display: inline-block;
+    flex-shrink: 0;
     width: 20px;
     text-align: center;
     font-size: 15px;
@@ -358,7 +384,6 @@ body {
 .sidebar-footer a:hover {
     background: rgba(255, 255, 255, .1);
     border-left-color: var(--accent-500);
-    padding-left: 16px;
 }
 
 .sidebar-menu a:hover i,
@@ -367,7 +392,7 @@ body {
 }
 
 .sidebar-divider {
-    margin: 10px 20px;
+    margin: 10px 0;
     height: 1px;
     background: rgba(255, 255, 255, .1);
 }
@@ -1372,10 +1397,7 @@ textarea {
 
 @media (prefers-reduced-motion: reduce) {
 
-    .sidebar,
-    .sidebar-logo-text,
-    .sidebar-menu a span,
-    .sidebar-footer a span {
+    .sidebar {
         transition: none;
     }
 }
