@@ -1,57 +1,31 @@
 # Production Manager
 
-Production Manager is a web-based application for managing and monitoring agro-industrial production processes at an educational institution. It replaces manual record-keeping with a digital platform that improves organization, accessibility, and data traceability.
-
-The **Productions** module is the core of the system and takes priority over all others.
+Web application for recording and reviewing agro-industrial production at an educational institution. Replaces paper record-keeping with role-based access, period reports, and Excel/PDF export.
 
 ## Features
 
-- **Authentication & roles**: login, password recovery via single-use tokens, and role-based access (Admin, Professor, Administration).
-- **Product & section management**: create, edit, and toggle active status.
-- **Productions**: create, edit, view, and search records, with permission rules (professors can only edit their own records).
-- **Reports**: weekly, monthly, semester, and yearly, accessible from a central reports index.
-- **Excel/PDF export**: available only to Admin and Administration roles.
-- **Modern UI**: CSS variable-based design system, layered shadows, fixed top header, and a 7-day production trend chart.
+- **Authentication and roles** — hashed passwords, three roles, and admin-driven password reset (temporary password shown once, forced change on next login).
+- **Productions** — create, edit, view, and search records. Professors can only edit their own.
+- **Products and sections** — create, edit, and toggle active status. Never deleted, to preserve traceability.
+- **Reports** — weekly, monthly, semester, and yearly, with quantity totals by product and by section. Quantities in different units are never summed together.
+- **Export** — any report to Excel or PDF, including totals.
+- **Interface** — CSS variable theming, light and dark mode, hover-expanding sidebar, tables that stack as cards on phones, and a 7-day production chart.
 
-## Tech Stack
+## Roles
 
-**Backend:** Plain PHP, PDO, MySQL
-**Frontend:** HTML, CSS (variable-based theming), JavaScript, Chart.js, Font Awesome
-**PHP libraries:** `phpmailer/phpmailer`, `phpoffice/phpspreadsheet`, `dompdf/dompdf`
+| | Admin | Professor | Administration |
+|---|:---:|:---:|:---:|
+| Record productions | Yes | Yes | Yes |
+| Edit any production | Yes | Own only | Yes |
+| Manage products, sections, users | Yes | No | No |
+| Reset passwords | Yes | No | No |
+| View and export reports | No | No | Yes |
 
-## Project Structure
+Permissions are enforced server-side on every page, not by hiding links.
 
-```text
-production-manager/
-│
-├── assets/            # CSS (theme system), images, JS (theme.js)
-├── auth/              # Login, logout, password recovery
-├── config/            # DB connection, sessions, permissions, mail, export
-├── dashboard/
-├── database/          # schema.sql, seed.sql
-├── includes/          # header, footer, sidebar
-├── productions/       # Core module
-├── products/
-├── reports/           # Weekly, monthly, semester, yearly + export
-├── sections/
-├── users/
-│
-└── README.md
-```
+## Tech stack
 
-## Installation
-
-```bash
-git clone https://github.com/paulina-rc/Production-Manager.git
-composer install
-cp .env.example .env
-```
-
-Create a MySQL database, import `database/schema.sql` and `database/seed.sql`, set your credentials in `.env`, then start Apache and MySQL via XAMPP and visit:
-
-```text
-http://localhost/Production-Manager/auth/login.php
-```
+Plain PHP, PDO, MySQL. HTML, CSS, JavaScript, Chart.js, Font Awesome. Uses `phpoffice/phpspreadsheet` and `dompdf/dompdf`.
 
 ## Author
 
