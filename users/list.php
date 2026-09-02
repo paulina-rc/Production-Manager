@@ -7,7 +7,31 @@ require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/config/csrf.php';
 
-$stmt = $pdo->query("
+$perPage = 20;
+
+$page = (int) ($_GET['page'] ?? 1);
+if ($page < 1) {
+    $page = 1;
+}
+
+$totalUsers = (int) $pdo->query("
+    SELECT COUNT(*)
+    FROM users
+    INNER JOIN roles
+        ON users.role_id = roles.id
+")->fetchColumn();
+
+$totalPages = $totalUsers > 0
+    ? (int) ceil($totalUsers / $perPage)
+    : 0;
+
+if ($totalPages > 0 && $page > $totalPages) {
+    $page = $totalPages;
+}
+
+$offset = ($page - 1) * $perPage;
+
+$stmt = $pdo->prepare("
     SELECT
         users.id,
         users.full_name,
@@ -18,9 +42,20 @@ $stmt = $pdo->query("
     INNER JOIN roles
         ON users.role_id = roles.id
     ORDER BY users.full_name ASC
+    LIMIT ? OFFSET ?
 ");
 
+$stmt->execute([$perPage, $offset]);
+
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+function buildPageUrl($page)
+{
+    $params = $_GET;
+    $params['page'] = $page;
+
+    return '?' . http_build_query($params);
+}
 
 $error = '';
 
@@ -66,7 +101,7 @@ if (($_GET['error'] ?? '') === 'self') {
             <h3>Total Usuarios</h3>
 
             <div class="stat-number">
-                <?php echo count($users); ?>
+                <?php echo $totalUsers; ?>
             </div>
 
         </div>
@@ -95,6 +130,12 @@ if (($_GET['error'] ?? '') === 'self') {
             </a>
 
         </div>
+
+        <?php if (empty($users)): ?>
+
+            <p>No se encontraron usuarios.</p>
+
+        <?php else: ?>
 
         <table class="table">
 
@@ -170,6 +211,36 @@ if (($_GET['error'] ?? '') === 'self') {
             </tbody>
 
         </table>
+
+        <div class="pagination">
+
+            <?php if ($page > 1): ?>
+                <a href="<?php echo htmlspecialchars(buildPageUrl($page - 1)); ?>" class="btn btn-sm btn-secondary">
+                    Anterior
+                </a>
+            <?php else: ?>
+                <span class="btn btn-sm btn-secondary pagination-disabled">
+                    Anterior
+                </span>
+            <?php endif; ?>
+
+            <span class="pagination-status">
+                Página <?php echo $page; ?> de <?php echo $totalPages; ?>
+            </span>
+
+            <?php if ($page < $totalPages): ?>
+                <a href="<?php echo htmlspecialchars(buildPageUrl($page + 1)); ?>" class="btn btn-sm btn-secondary">
+                    Siguiente
+                </a>
+            <?php else: ?>
+                <span class="btn btn-sm btn-secondary pagination-disabled">
+                    Siguiente
+                </span>
+            <?php endif; ?>
+
+        </div>
+
+        <?php endif; ?>
 
     </div>
 

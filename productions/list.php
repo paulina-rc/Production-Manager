@@ -5,20 +5,14 @@ require_once dirname(__DIR__) . '/config/database.php';
 
 $search = trim($_GET['search'] ?? '');
 
-$sql = "
-    SELECT
-        productions.id,
-        productions.production_date,
-        products.name AS product_name,
-        productions.quantity,
-        productions.unit,
+$perPage = 20;
 
-        processor.full_name AS processed_by_name,
+$page = (int) ($_GET['page'] ?? 1);
+if ($page < 1) {
+    $page = 1;
+}
 
-        creator.full_name AS created_by_name,
-
-        sections.name AS section_name
-
+$joinsSql = "
     FROM productions
 
     INNER JOIN products
@@ -40,7 +34,7 @@ $params = [];
 
 if (!empty($search)) {
 
-    $sql .= "
+    $joinsSql .= "
         AND (
             products.name LIKE ?
             OR processor.full_name LIKE ?
@@ -59,14 +53,56 @@ if (!empty($search)) {
     ];
 }
 
-$sql .= " ORDER BY productions.production_date DESC";
+$countStmt = $pdo->prepare("SELECT COUNT(*) {$joinsSql}");
+$countStmt->execute($params);
+
+$totalProductions = (int) $countStmt->fetchColumn();
+
+$totalPages = $totalProductions > 0
+    ? (int) ceil($totalProductions / $perPage)
+    : 0;
+
+if ($totalPages > 0 && $page > $totalPages) {
+    $page = $totalPages;
+}
+
+$offset = ($page - 1) * $perPage;
+
+$sql = "
+    SELECT
+        productions.id,
+        productions.production_date,
+        products.name AS product_name,
+        productions.quantity,
+        productions.unit,
+
+        processor.full_name AS processed_by_name,
+
+        creator.full_name AS created_by_name,
+
+        sections.name AS section_name
+
+    {$joinsSql}
+    ORDER BY productions.production_date DESC
+    LIMIT ? OFFSET ?
+";
+
+$listParams = $params;
+$listParams[] = $perPage;
+$listParams[] = $offset;
 
 $stmt = $pdo->prepare($sql);
-$stmt->execute($params);
+$stmt->execute($listParams);
 
 $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$totalProductions = count($productions);
+function buildPageUrl($page)
+{
+    $params = $_GET;
+    $params['page'] = $page;
+
+    return '?' . http_build_query($params);
+}
 
 ?>
 
@@ -224,6 +260,34 @@ $totalProductions = count($productions);
             </tbody>
 
         </table>
+
+        <div class="pagination">
+
+            <?php if ($page > 1): ?>
+                <a href="<?php echo htmlspecialchars(buildPageUrl($page - 1)); ?>" class="btn btn-sm btn-secondary">
+                    Anterior
+                </a>
+            <?php else: ?>
+                <span class="btn btn-sm btn-secondary pagination-disabled">
+                    Anterior
+                </span>
+            <?php endif; ?>
+
+            <span class="pagination-status">
+                Página <?php echo $page; ?> de <?php echo $totalPages; ?>
+            </span>
+
+            <?php if ($page < $totalPages): ?>
+                <a href="<?php echo htmlspecialchars(buildPageUrl($page + 1)); ?>" class="btn btn-sm btn-secondary">
+                    Siguiente
+                </a>
+            <?php else: ?>
+                <span class="btn btn-sm btn-secondary pagination-disabled">
+                    Siguiente
+                </span>
+            <?php endif; ?>
+
+        </div>
 
         <?php endif; ?>
 

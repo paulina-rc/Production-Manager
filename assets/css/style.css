@@ -697,6 +697,26 @@ body {
     color: var(--primary-500);
 }
 
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.pagination-status {
+    color: var(--gray-700);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.pagination-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 /* ===========================
    FORMS
 =========================== */
