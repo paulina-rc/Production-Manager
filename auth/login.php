@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['full_name'];
         $_SESSION['role_id'] = $user['role_id'];
+        $_SESSION['must_change_password'] = (int) $user['must_change_password'];
 
         header('Location: ../dashboard/index.php');
         exit;
@@ -137,14 +138,6 @@ if (isset($_SESSION['user_id'])) {
             </button>
 
         </form>
-
-        <div class="login-footer">
-
-            <a href="forgot_password.php">
-                ¿Olvidaste tu contraseña?
-            </a>
-
-        </div>
 
     </div>
 

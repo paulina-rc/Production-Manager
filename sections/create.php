@@ -1,4 +1,3 @@
-```php
 <?php
 
 require_once '../config/permissions.php';
@@ -6,10 +5,13 @@ requireAdmin();
 
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/csrf.php';
 
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    csrfCheck();
 
     $name = trim($_POST['name']);
 
@@ -93,6 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <form method="POST">
 
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken()); ?>">
+
             <div class="form-group">
 
                 <label>Nombre de la Sección</label>
@@ -133,4 +137,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </body>
 </html>
-```

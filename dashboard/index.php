@@ -82,6 +82,27 @@ $chartLabels = json_encode(array_map(function ($d) {
 
 $chartValues = json_encode(array_values($days));
 
+$weeklyTotalsStmt = $pdo->prepare("
+    SELECT
+        products.name AS product_name,
+        CASE
+            WHEN productions.unit = 'Otro' THEN productions.custom_unit
+            ELSE productions.unit
+        END AS unit_label,
+        SUM(productions.quantity) AS total_quantity
+    FROM productions
+    INNER JOIN products
+        ON productions.product_id = products.id
+    WHERE productions.production_date >= ?
+    AND productions.production_date < DATE_ADD(?, INTERVAL 1 DAY)
+    AND productions.deleted_at IS NULL
+    GROUP BY products.id, products.name, productions.unit, productions.custom_unit
+    ORDER BY total_quantity DESC
+");
+$weeklyTotalsStmt->execute([$rangeStart, $rangeEnd]);
+
+$weeklyTotals = $weeklyTotalsStmt->fetchAll(PDO::FETCH_ASSOC);
+
 $today = date('d/m/Y');
 
 ?>
@@ -254,6 +275,62 @@ $today = date('d/m/Y');
             </div>
 
         </div>
+
+    </div>
+
+    <div class="table-card">
+
+        <div class="table-header">
+            <h2>Producción Total - Últimos 7 Días</h2>
+        </div>
+
+        <?php if (empty($weeklyTotals)): ?>
+
+            <p>
+                No hay producciones registradas en los últimos 7 días.
+            </p>
+
+        <?php else: ?>
+
+            <table class="table">
+
+                <thead>
+
+                    <tr>
+                        <th>Producto</th>
+                        <th class="text-right">Cantidad</th>
+                        <th>Unidad</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                <?php foreach ($weeklyTotals as $total): ?>
+
+                    <tr>
+
+                        <td>
+                            <?php echo htmlspecialchars($total['product_name']); ?>
+                        </td>
+
+                        <td class="text-right">
+                            <?php echo htmlspecialchars($total['total_quantity']); ?>
+                        </td>
+
+                        <td>
+                            <?php echo htmlspecialchars($total['unit_label']); ?>
+                        </td>
+
+                    </tr>
+
+                <?php endforeach; ?>
+
+                </tbody>
+
+            </table>
+
+        <?php endif; ?>
 
     </div>
 

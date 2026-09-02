@@ -2,6 +2,7 @@
 
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/csrf.php';
 
 $products = $pdo->query("
     SELECT id, name
@@ -20,6 +21,8 @@ $sections = $pdo->query("
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    csrfCheck();
 
     $productionDate = $_POST['production_date'];
     $productId = (int) $_POST['product_id'];
@@ -134,6 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <form method="POST">
 
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken()); ?>">
+
     <div class="form-grid">
 
         <div class="form-group">
@@ -239,12 +244,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Seleccione una unidad
                 </option>
 
-                <option value="Units">Unidades</option>
-                <option value="Kilograms">Kilogramos</option>
-                <option value="Grams">Gramos</option>
-                <option value="Liters">Litros</option>
-                <option value="Milliliters">Mililitros</option>
-                <option value="Other">Otro</option>
+                <option value="Unidades">Unidades</option>
+                <option value="Kilogramos">Kilogramos</option>
+                <option value="Gramos">Gramos</option>
+                <option value="Litros">Litros</option>
+                <option value="Mililitros">Mililitros</option>
+                <option value="Otro">Otro</option>
 
             </select>
 

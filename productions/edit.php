@@ -2,6 +2,7 @@
 
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/csrf.php';
 
 if (!isset($_GET['id'])) {
     header('Location: list.php');
@@ -56,6 +57,8 @@ $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    csrfCheck();
 
     $productionDate = $_POST['production_date'];
     $productId = (int) $_POST['product_id'];
@@ -164,6 +167,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <form method="POST">
 
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken()); ?>">
+
             <div class="form-grid">
 
                 <div class="form-group">
@@ -261,27 +266,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         required
                     >
 
-                        <option value="Units" <?php echo ($production['unit'] == 'Units') ? 'selected' : ''; ?>>
+                        <option value="Unidades" <?php echo ($production['unit'] == 'Unidades') ? 'selected' : ''; ?>>
                             Unidades
                         </option>
 
-                        <option value="Kilograms" <?php echo ($production['unit'] == 'Kilograms') ? 'selected' : ''; ?>>
+                        <option value="Kilogramos" <?php echo ($production['unit'] == 'Kilogramos') ? 'selected' : ''; ?>>
                             Kilogramos
                         </option>
 
-                        <option value="Grams" <?php echo ($production['unit'] == 'Grams') ? 'selected' : ''; ?>>
+                        <option value="Gramos" <?php echo ($production['unit'] == 'Gramos') ? 'selected' : ''; ?>>
                             Gramos
                         </option>
 
-                        <option value="Liters" <?php echo ($production['unit'] == 'Liters') ? 'selected' : ''; ?>>
+                        <option value="Litros" <?php echo ($production['unit'] == 'Litros') ? 'selected' : ''; ?>>
                             Litros
                         </option>
 
-                        <option value="Milliliters" <?php echo ($production['unit'] == 'Milliliters') ? 'selected' : ''; ?>>
+                        <option value="Mililitros" <?php echo ($production['unit'] == 'Mililitros') ? 'selected' : ''; ?>>
                             Mililitros
                         </option>
 
-                        <option value="Other" <?php echo ($production['unit'] == 'Other') ? 'selected' : ''; ?>>
+                        <option value="Otro" <?php echo ($production['unit'] == 'Otro') ? 'selected' : ''; ?>>
                             Otro
                         </option>
 

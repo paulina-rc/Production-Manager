@@ -5,20 +5,14 @@ require_once dirname(__DIR__) . '/config/database.php';
 
 $search = trim($_GET['search'] ?? '');
 
-$sql = "
-    SELECT
-        productions.id,
-        productions.production_date,
-        products.name AS product_name,
-        productions.quantity,
-        productions.unit,
+$perPage = 20;
 
-        processor.full_name AS processed_by_name,
+$page = (int) ($_GET['page'] ?? 1);
+if ($page < 1) {
+    $page = 1;
+}
 
-        creator.full_name AS created_by_name,
-
-        sections.name AS section_name
-
+$joinsSql = "
     FROM productions
 
     INNER JOIN products
@@ -36,37 +30,84 @@ $sql = "
     WHERE productions.deleted_at IS NULL
 ";
 
-$params = [];
-
 if (!empty($search)) {
 
-    $sql .= "
+    $joinsSql .= "
         AND (
-            products.name LIKE ?
-            OR processor.full_name LIKE ?
-            OR creator.full_name LIKE ?
-            OR sections.name LIKE ?
+            products.name LIKE :search1
+            OR processor.full_name LIKE :search2
+            OR creator.full_name LIKE :search3
+            OR sections.name LIKE :search4
         )
     ";
 
     $searchTerm = '%' . $search . '%';
-
-    $params = [
-        $searchTerm,
-        $searchTerm,
-        $searchTerm,
-        $searchTerm
-    ];
 }
 
-$sql .= " ORDER BY productions.production_date DESC";
+$countStmt = $pdo->prepare("SELECT COUNT(*) {$joinsSql}");
+
+if (!empty($search)) {
+    $countStmt->bindValue(':search1', $searchTerm, PDO::PARAM_STR);
+    $countStmt->bindValue(':search2', $searchTerm, PDO::PARAM_STR);
+    $countStmt->bindValue(':search3', $searchTerm, PDO::PARAM_STR);
+    $countStmt->bindValue(':search4', $searchTerm, PDO::PARAM_STR);
+}
+
+$countStmt->execute();
+
+$totalProductions = (int) $countStmt->fetchColumn();
+
+$totalPages = $totalProductions > 0
+    ? (int) ceil($totalProductions / $perPage)
+    : 0;
+
+if ($totalPages > 0 && $page > $totalPages) {
+    $page = $totalPages;
+}
+
+$offset = ($page - 1) * $perPage;
+
+$sql = "
+    SELECT
+        productions.id,
+        productions.production_date,
+        products.name AS product_name,
+        productions.quantity,
+        productions.unit,
+
+        processor.full_name AS processed_by_name,
+
+        creator.full_name AS created_by_name,
+
+        sections.name AS section_name
+
+    {$joinsSql}
+    ORDER BY productions.production_date DESC
+    LIMIT :limit OFFSET :offset
+";
 
 $stmt = $pdo->prepare($sql);
-$stmt->execute($params);
+
+if (!empty($search)) {
+    $stmt->bindValue(':search1', $searchTerm, PDO::PARAM_STR);
+    $stmt->bindValue(':search2', $searchTerm, PDO::PARAM_STR);
+    $stmt->bindValue(':search3', $searchTerm, PDO::PARAM_STR);
+    $stmt->bindValue(':search4', $searchTerm, PDO::PARAM_STR);
+}
+
+$stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
 
 $productions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$totalProductions = count($productions);
+function buildPageUrl($page)
+{
+    $params = $_GET;
+    $params['page'] = $page;
+
+    return '?' . http_build_query($params);
+}
 
 ?>
 
@@ -121,30 +162,22 @@ $totalProductions = count($productions);
 
         </div>
 
-        <form method="GET" style="margin-bottom:20px;">
+        <form method="GET">
 
-            <form method="GET" style="margin-bottom:20px;">
+            <input
+                type="text"
+                name="search"
+                placeholder="Buscar producto, usuario o sección..."
+                value="<?php echo htmlspecialchars($search); ?>"
+                class="form-control"
+            >
 
-        
-        <input
-            type="text"
-            name="search"
-            placeholder="Buscar producto, usuario o sección..."
-            value="<?php echo htmlspecialchars($search); ?>"
-            style="width:100%; padding:10px; border-radius:8px;"
-        >
-
-        <button
-            type="submit"
-            class="btn"
-            style="margin-top:10px;"
-        >
-            Buscar
-        </button>
-        
-
-</form>
-
+            <button
+                type="submit"
+                class="btn"
+            >
+                Buscar
+            </button>
 
         </form>
 
@@ -177,35 +210,35 @@ $totalProductions = count($productions);
 
                 <tr>
 
-                    <td>
+                    <td data-label="Fecha">
                         <?php echo htmlspecialchars($production['production_date']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Producto">
                         <?php echo htmlspecialchars($production['product_name']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Procesado Por">
                         <?php echo htmlspecialchars($production['processed_by_name']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Registrado Por">
                         <?php echo htmlspecialchars($production['created_by_name']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Sección">
                         <?php echo htmlspecialchars($production['section_name']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Cantidad">
                         <?php echo htmlspecialchars($production['quantity']); ?>
                     </td>
 
-                    <td>
+                    <td data-label="Unidad">
                         <?php echo htmlspecialchars($production['unit']); ?>
                     </td>
 
-                    <td class="action-links">
+                    <td class="action-links" data-label="Acciones">
 
                         <a href="view.php?id=<?php echo $production['id']; ?>">
                             Ver
@@ -224,6 +257,34 @@ $totalProductions = count($productions);
             </tbody>
 
         </table>
+
+        <div class="pagination">
+
+            <?php if ($page > 1): ?>
+                <a href="<?php echo htmlspecialchars(buildPageUrl($page - 1)); ?>" class="btn btn-sm btn-secondary">
+                    Anterior
+                </a>
+            <?php else: ?>
+                <span class="btn btn-sm btn-secondary pagination-disabled">
+                    Anterior
+                </span>
+            <?php endif; ?>
+
+            <span class="pagination-status">
+                Página <?php echo $page; ?> de <?php echo $totalPages; ?>
+            </span>
+
+            <?php if ($page < $totalPages): ?>
+                <a href="<?php echo htmlspecialchars(buildPageUrl($page + 1)); ?>" class="btn btn-sm btn-secondary">
+                    Siguiente
+                </a>
+            <?php else: ?>
+                <span class="btn btn-sm btn-secondary pagination-disabled">
+                    Siguiente
+                </span>
+            <?php endif; ?>
+
+        </div>
 
         <?php endif; ?>
 

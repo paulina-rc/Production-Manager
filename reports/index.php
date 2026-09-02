@@ -3,6 +3,8 @@
 require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/permissions.php';
 
+requireAdministracion();
+
 ?>
 
 <!DOCTYPE html>

@@ -1,38 +1,14 @@
 <?php
 
+require_once dirname(__DIR__) . '/config/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/config/csrf.php';
 
 $error = '';
 
-$token = $_GET['token'] ?? '';
-
-if (empty($token)) {
-    die('Token inválido.');
-}
-
-$stmt = $pdo->prepare("
-    SELECT
-        password_resets.id AS reset_id,
-        password_resets.user_id,
-        password_resets.expires_at
-    FROM password_resets
-    WHERE password_resets.token = ?
-    LIMIT 1
-");
-
-$stmt->execute([$token]);
-
-$reset = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$reset) {
-    die('Token inválido.');
-}
-
-if (strtotime($reset['expires_at']) < time()) {
-    die('El enlace ha expirado.');
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    csrfCheck();
 
     $password = $_POST['password'] ?? '';
     $confirmPassword = $_POST['confirm_password'] ?? '';
@@ -58,19 +34,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pdo->prepare("
             UPDATE users
-            SET password = ?
+            SET password = ?, must_change_password = 0
             WHERE id = ?
         ")->execute([
             $hashedPassword,
-            $reset['user_id']
+            $_SESSION['user_id']
         ]);
 
-        $pdo->prepare("
-            DELETE FROM password_resets
-            WHERE id = ?
-        ")->execute([$reset['reset_id']]);
+        $_SESSION['must_change_password'] = 0;
 
-        header('Location: login.php?reset=success');
+        header('Location: ../dashboard/');
         exit;
     }
 }
@@ -83,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <meta charset="UTF-8">
 
-    <title>Restablecer Contraseña</title>
+    <title>Cambiar Contraseña</title>
 
     <?php require_once '../includes/header.php'; ?>
 
@@ -94,10 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="welcome-box">
 
-        <h1>Restablecer Contraseña</h1>
+        <h1>Cambiar Contraseña</h1>
 
         <p>
-            Ingresa tu nueva contraseña.
+            Debés establecer una nueva contraseña antes de continuar.
         </p>
 
     </div>
@@ -106,33 +79,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if (!empty($error)): ?>
 
-            <p>
+            <div class="badge badge-danger">
                 <?php echo htmlspecialchars($error); ?>
-            </p>
+            </div>
+
+            <br><br>
 
         <?php endif; ?>
 
         <form method="POST">
 
-            <label>Nueva Contraseña</label>
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken()); ?>">
 
-            <input
-                type="password"
-                name="password"
-                required
-            >
+            <div class="form-group">
 
-            <br><br>
+                <label>Nueva Contraseña</label>
 
-            <label>Confirmar Contraseña</label>
+                <input
+                    type="password"
+                    name="password"
+                    class="form-control"
+                    minlength="8"
+                    required
+                >
 
-            <input
-                type="password"
-                name="confirm_password"
-                required
-            >
+            </div>
 
-            <br><br>
+            <div class="form-group">
+
+                <label>Confirmar Contraseña</label>
+
+                <input
+                    type="password"
+                    name="confirm_password"
+                    class="form-control"
+                    minlength="8"
+                    required
+                >
+
+            </div>
 
             <button
                 type="submit"

@@ -7,27 +7,51 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-function exportToExcel(array $data, array $headers, string $filename)
+/**
+ * Cada sección de $sections es:
+ * ['title' => string, 'headers' => string[], 'rows' => array[]]
+ */
+function exportToExcel(array $sections, string $filename)
 {
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
 
-    foreach ($headers as $col => $header) {
-        $sheet->setCellValue(chr(65 + $col) . '1', $header);
-    }
+    $row = 1;
+    $maxCols = 1;
 
-    $style = $sheet->getStyle('A1:' . chr(64 + count($headers)) . '1');
-    $style->getFont()->setBold(true);
+    foreach ($sections as $section) {
 
-    foreach ($data as $row => $record) {
-        $col = 0;
-        foreach ($record as $value) {
-            $sheet->setCellValue(chr(65 + $col) . ($row + 2), $value);
-            $col++;
+        $maxCols = max($maxCols, count($section['headers']));
+
+        $sheet->setCellValue('A' . $row, $section['title']);
+        $sheet->getStyle('A' . $row)->getFont()->setBold(true)->setSize(14);
+        $row++;
+
+        $headerRow = $row;
+
+        foreach ($section['headers'] as $col => $header) {
+            $sheet->setCellValue(chr(65 + $col) . $headerRow, $header);
         }
+
+        $lastCol = chr(64 + count($section['headers']));
+        $sheet->getStyle('A' . $headerRow . ':' . $lastCol . $headerRow)
+            ->getFont()->setBold(true);
+
+        $row++;
+
+        foreach ($section['rows'] as $record) {
+            $col = 0;
+            foreach ($record as $value) {
+                $sheet->setCellValue(chr(65 + $col) . $row, $value);
+                $col++;
+            }
+            $row++;
+        }
+
+        $row += 2;
     }
 
-    foreach (range(0, count($headers) - 1) as $col) {
+    foreach (range(0, $maxCols - 1) as $col) {
         $sheet->getColumnDimension(chr(65 + $col))->setAutoSize(true);
     }
 
@@ -40,7 +64,11 @@ function exportToExcel(array $data, array $headers, string $filename)
     exit;
 }
 
-function exportToPdf(array $data, array $headers, string $title, string $filename)
+/**
+ * Cada sección de $sections es:
+ * ['title' => string, 'headers' => string[], 'rows' => array[]]
+ */
+function exportToPdf(array $sections, string $title, string $filename)
 {
     $options = new Options();
     $options->set('isHtml5ParserEnabled', true);
@@ -52,7 +80,8 @@ function exportToPdf(array $data, array $headers, string $title, string $filenam
         <style>
             body { font-family: sans-serif; font-size: 12px; }
             h2 { color: #14532d; margin-bottom: 15px; }
-            table { width: 100%; border-collapse: collapse; }
+            h3 { color: #14532d; margin-top: 25px; margin-bottom: 10px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
             th { background: #14532d; color: white; padding: 8px; text-align: left; }
             td { padding: 6px 8px; border-bottom: 1px solid #ddd; }
             tr:nth-child(even) { background: #f9f9f9; }
@@ -60,23 +89,28 @@ function exportToPdf(array $data, array $headers, string $title, string $filenam
     ';
 
     $html .= '<h2>' . htmlspecialchars($title) . '</h2>';
-    $html .= '<table><thead><tr>';
 
-    foreach ($headers as $header) {
-        $html .= '<th>' . htmlspecialchars($header) . '</th>';
-    }
+    foreach ($sections as $section) {
 
-    $html .= '</tr></thead><tbody>';
+        $html .= '<h3>' . htmlspecialchars($section['title']) . '</h3>';
+        $html .= '<table><thead><tr>';
 
-    foreach ($data as $record) {
-        $html .= '<tr>';
-        foreach ($record as $value) {
-            $html .= '<td>' . htmlspecialchars($value) . '</td>';
+        foreach ($section['headers'] as $header) {
+            $html .= '<th>' . htmlspecialchars($header) . '</th>';
         }
-        $html .= '</tr>';
-    }
 
-    $html .= '</tbody></table>';
+        $html .= '</tr></thead><tbody>';
+
+        foreach ($section['rows'] as $record) {
+            $html .= '<tr>';
+            foreach ($record as $value) {
+                $html .= '<td>' . htmlspecialchars($value) . '</td>';
+            }
+            $html .= '</tr>';
+        }
+
+        $html .= '</tbody></table>';
+    }
 
     $dompdf->loadHtml($html);
     $dompdf->setPaper('A4', 'landscape');

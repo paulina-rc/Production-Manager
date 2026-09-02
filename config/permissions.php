@@ -62,11 +62,24 @@ function isAdministracion()
     return isset($_SESSION['role_id']) && $_SESSION['role_id'] == 3;
 }
 
+/**
+ * Verifica que el usuario sea del rol Administración.
+ */
+function requireAdministracion()
+{
+    requireLogin();
+
+    if ($_SESSION['role_id'] != 3) {
+        header('Location: ../dashboard/');
+        exit;
+    }
+}
+
 function requireExportPermission()
 {
     requireLogin();
 
-    if (!in_array($_SESSION['role_id'], [1, 3])) {
+    if ($_SESSION['role_id'] != 3) {
         header('Location: ../dashboard/');
         exit;
     }
