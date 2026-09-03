@@ -1,75 +1,36 @@
 # Production Manager
 
-Production Manager is a web-based application designed to manage and monitor production processes. The project was developed to centralize information related to products and production records.
-
-The system aims to replace manual record-keeping processes with a digital platform that improves organization, accessibility, and data traceability. 
-
-## Project Overview
-
-The primary goal of Production Manager is to provide an integrated solution for managing agro-industrial production activities. The platform allows institutions to maintain accurate records of production operations while ensuring accountability through user identification and activity tracking.
+Web application for recording and reviewing agro-industrial production at an educational institution. Replaces paper record-keeping with role-based access, period reports, and Excel/PDF export.
 
 ## Features
 
-The application currently includes user authentication and authorization, product management, section management, production tracking, and reporting capabilities.
+- **Authentication and roles** — hashed passwords, three roles, and admin-driven password reset (temporary password shown once, forced change on next login).
+- **Productions** — create, edit, view, and search records. Professors can only edit their own.
+- **Products and sections** — create, edit, and toggle active status. Never deleted, to preserve traceability.
+- **Reports** — weekly, monthly, semester, and yearly, with quantity totals by product and by section. Quantities in different units are never summed together.
+- **Export** — any report to Excel or PDF, including totals.
+- **Interface** — CSS variable theming, light and dark mode, hover-expanding sidebar, tables that stack as cards on phones, and a 7-day production chart.
 
-Users can create and manage production records, associate products with specific sections, and maintain a complete history of production activities. The system also includes password recovery functionality and role-based permissions to ensure secure access to sensitive information.
+## Roles
 
-Reporting tools allow users to generate monthly, semester-based, and annual production reports, providing valuable insights into operational performance over time.
+| | Admin | Professor | Administration |
+|---|:---:|:---:|:---:|
+| Record productions | Yes | Yes | Yes |
+| Edit any production | Yes | Own only | Yes |
+| Manage products, sections, users | Yes | No | No |
+| Reset passwords | Yes | No | No |
+| View and export reports | No | No | Yes |
 
-## Technology Stack
+Permissions are enforced server-side on every page, not by hiding links.
 
-The backend of the application is developed using PHP and MySQL, following a structured architecture that emphasizes maintainability and scalability.
+## Tech stack
 
-The frontend is built with HTML, CSS, and JavaScript, providing a responsive and user-friendly interface.
-
-Development and deployment are supported by tools such as XAMPP, phpMyAdmin, Git, and GitHub.
-
-## Project Structure
-
-```text
-production-manager/
-│
-├── assets/
-│   ├── css/
-│   ├── img/
-│   └── js/
-│
-├── auth/
-├── config/
-├── dashboard/
-├── database/
-├── includes/
-├── productions/
-├── products/
-├── reports/
-├── sections/
-├── users/
-│
-└── README.md
-```
-
-## Installation
-
-To run the project locally, clone the repository and place it inside the `htdocs` directory of your XAMPP installation.
-
-Create a MySQL database and import the `schema.sql` file included in the project. Once the database has been configured, start Apache and MySQL from the XAMPP Control Panel and access the application through your browser.
-
-```bash
-git clone https://github.com/your-username/production-manager.git
-```
-
-The application will be available at:
-
-```text
-http://localhost/production-manager
-```
-
-## Current Status
-
-Production Manager is currently under active development. Core modules such as user management, product management, section administration, production tracking, and reporting are already functional.
-
-Ongoing work focuses on interface improvements, dashboard enhancements, report exports, and additional administrative features aimed at improving usability and system efficiency.
+Plain PHP, PDO, MySQL. HTML, CSS, JavaScript, Chart.js, Font Awesome. Uses `phpoffice/phpspreadsheet` and `dompdf/dompdf`.
 
 ## Author
 
 **Paulina Rojas** — [@paulina-rc](https://github.com/paulina-rc)
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
